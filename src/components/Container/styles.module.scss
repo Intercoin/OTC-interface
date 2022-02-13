@@ -1,0 +1,39 @@
+@import '../../assets/styles/mixins';
+@import '../../assets/styles/variables';
+
+.container {
+  border-radius: $border-radius-md;
+  background: #ffffff;
+  max-width: 540px;
+  width: 100%;
+  border: 1px solid rgb(231, 227, 235);
+
+  .header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 1rem;
+    border-bottom: 1px solid rgb(231, 227, 235);
+
+    .title {
+      font-weight: 600;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: rgb(122, 110, 170);
+    }
+
+    .buttonBack {
+      position: absolute;
+      left: 16px;
+      top: 22px;
+    }
+  }
+
+  .childrenWrapper {
+    padding: 1rem;
+  }
+}

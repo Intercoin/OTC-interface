@@ -1,0 +1,93 @@
+@import '../../assets/styles/mixins';
+@import '../../assets/styles/variables';
+
+.headerWrapper {
+  @include flexbox();
+  width: 100%;
+}
+
+.header {
+  @include flexbox(center, space-between);
+  max-width: 376px;
+  width: 100%;
+  padding: 15px 16px;
+
+  @include mobile {
+    max-width: 576px;
+    padding: 20px 16px;
+  }
+
+  @include tablet {
+    max-width: 768px;
+  }
+
+  @include tablet-big {
+    max-width: 977px;
+  }
+}
+
+.link {
+  margin-right: 24px;
+  color: rgb(122, 110, 170);
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid transparent;
+  transition: border-bottom-color $animation-time;
+
+  &:hover {
+    border-bottom: 1px solid rgb(118, 69, 217);
+  }
+}
+
+.linkActive {
+  color: rgb(118, 69, 217)
+}
+
+.navigationWrapper {
+  display: flex;
+  flex-direction: column;
+
+  @include mobile {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.navigation {
+  display: flex;
+  margin-left: 0;
+  padding-top: 5px;
+  margin-top: 24px;
+
+  @include mobile {
+    margin-left: 56px;
+    margin-top: 0;
+  }
+}
+
+.navigation :last-child {
+  margin-right: 0;
+}
+
+.walletWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  @include mobile {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.walletAddress {
+  margin-right: 0;
+  margin-bottom: 15px;
+
+  @include mobile {
+    margin-bottom: 0;
+    margin-right: 10px;
+  }
+}
