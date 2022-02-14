@@ -15,7 +15,7 @@ const DEFAULT_MASK_OPTIONS = {
   suffix: '',
   prefix: '',
   includeThousandsSeparator: true,
-  thousandsSeparatorSymbol: ',',
+  thousandsSeparatorSymbol: '',
   allowDecimal: true,
   decimalSymbol: '.',
   decimalLimit: 10,

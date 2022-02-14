@@ -21,8 +21,8 @@ export const Header = ({
     <div className={styles.header}>
 
       <div className={styles.navigationWrapper}>
-        <div>
-          Swap Swap
+        <div className={styles.logo}>
+          OTC
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import Web3 from 'web3';
 
@@ -18,7 +18,7 @@ import { validationSchema, initialValues, Values } from './formik-data';
 import {
   tokenList,
   networkList, REGEX,
-  // ROUTES,
+  ROUTES,
 } from '../../constants';
 
 import styles from './styles.module.scss';
@@ -29,20 +29,42 @@ type Props = {
 
 export const TradeHash: FC<Props> = ({ methods }) => {
   const web3 = useWeb3React();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [copyImgStyles, setCopyImgStyles] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const formik = useFormik<Values>({
     initialValues,
     validationSchema,
-    onSubmit: (values, { setSubmitting }) => {
-      console.log(values);
-      // if (true) return;
-      // navigate(ROUTES.claim);
-      setSubmitting(false);
-    },
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    onSubmit,
   });
+
+  async function onSubmit(values, { setSubmitting }) {
+    setIsLoading(true);
+
+    try {
+      const res = await methods?.lock(
+        `0x${values.hash}`,
+        Web3.utils.toWei(values.amount, 'ether'),
+        values.token.value,
+        values.receiverAddress,
+        Web3.utils.toWei('0.1', 'ether'),
+      )?.send({ from: web3.account });
+
+      console.log('method lock', res);
+
+      setIsLoading(false);
+
+      navigate(ROUTES.claim);
+    } catch (e) {
+      setIsLoading(false);
+      console.log(e);
+    }
+
+    setSubmitting(false);
+  }
 
   const {
     values: {
@@ -63,6 +85,7 @@ export const TradeHash: FC<Props> = ({ methods }) => {
   } = formik;
 
   const handleTradeHash = async () => {
+    console.log('values', methods);
     const { tradeHash } = useTradeHash({
       network: network.value,
       chainId: web3.chainId,
@@ -73,16 +96,6 @@ export const TradeHash: FC<Props> = ({ methods }) => {
     });
 
     await setFieldValue('hash', tradeHash);
-
-    const res = await methods.lock(
-      `0x${tradeHash}`,
-      Web3.utils.toWei(amount, 'ether'),
-      token.value,
-      receiverAddress,
-      Web3.utils.toWei('0.1', 'ether'),
-    ).send({ from: web3.account });
-
-    console.log('method lock', res);
   };
 
   /** handleCopyTradeHash function
@@ -190,6 +203,7 @@ export const TradeHash: FC<Props> = ({ methods }) => {
         <Button
           type="submit"
           disabled={!dirty || !isValid}
+          isLoading={!isLoading}
         >
           Lock
         </Button>

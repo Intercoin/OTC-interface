@@ -5,31 +5,32 @@ import React, {
   ButtonHTMLAttributes,
 } from 'react';
 import cn from 'classnames';
+import { Loader } from 'components';
 
 import styles from './styles.module.scss';
 
 type Props = {
   className?: string,
   onClick?: MouseEventHandler,
-  loading?: boolean,
   disabled?: boolean,
+  isLoading?: boolean,
   type?: ButtonHTMLAttributes<string>['type'],
 };
 
 export const Button: FC<PropsWithChildren<Props>> = ({
   onClick,
   className,
-  loading,
   disabled,
   type = 'button',
+  isLoading,
   children,
 }) => (
   <button
     disabled={disabled}
-    onClick={loading ? () => {} : onClick}
+    onClick={isLoading ? () => {} : onClick}
     type={type}
     className={cn(styles.button, className)}
   >
-    {loading ? 'loading..' : children}
+    {isLoading ? <Loader /> : children}
   </button>
 );

@@ -14,7 +14,7 @@ export const useLoadWeb3 = (): Methods => {
   const web3 = useWeb3React();
   const provider = new Web3(Web3.givenProvider);
 
-  let methods = () => {};
+  let methods;
 
   useEffect(() => {
     async function load() {
@@ -49,7 +49,7 @@ export const useLoadWeb3 = (): Methods => {
     }
 
     default:
-      methods = () => {};
+      methods = null;
   }
 
   return { methods };

@@ -11,9 +11,9 @@ export type Values = {
 };
 
 export const initialValues = {
-  receiverAddress: '',
+  receiverAddress: '0x528e7c77B8F3001B512e8BF305b03CeA420951cd',
   amount: '',
-  hash: 'ewewe',
+  hash: '',
   network: { value: 'rinkeby', label: 'Rinkeby' },
   token: { value: 'USDT', label: 'USDT' },
 };
