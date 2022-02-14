@@ -6,6 +6,7 @@ import styles from './styles.module.scss';
 
 type Props = {
   className?: string,
+  error?: string | boolean,
 };
 
 export const Input: FC<Props & InputHTMLAttributes<HTMLInputElement>> = ({
@@ -16,15 +17,16 @@ export const Input: FC<Props & InputHTMLAttributes<HTMLInputElement>> = ({
   onBlur,
   name,
   disabled,
+  error,
 }) => (
-  <div className={styles.inputWrapper}>
+  <div className={cn(styles.inputWrapper)}>
     <input
       disabled={disabled}
       onBlur={onBlur}
       name={name}
       value={value}
       onChange={onChange}
-      className={cn(className, styles.input)}
+      className={cn(styles.input, { [styles.error]: !!error }, className)}
       placeholder={placeholder}
     />
   </div>

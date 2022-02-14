@@ -20,5 +20,12 @@
     &:focus {
       border: 2px solid rgb(136, 125, 159);
     }
+    &:disabled {
+      cursor: no-drop;
+    }
+  }
+
+  & > .error {
+    border-color: $color-error;
   }
 }

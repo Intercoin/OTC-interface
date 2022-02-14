@@ -12,7 +12,7 @@ export type Values = {
 export const initialValues = {
   receiverAddress: '',
   amount: '',
-  hash: '',
+  hash: 'ewewe',
   network: { value: 'rinkeby', label: 'Rinkeby' },
   token: { value: 'USDT', label: 'USDT' },
 };

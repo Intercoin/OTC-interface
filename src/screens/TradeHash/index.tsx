@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import Web3 from 'web3';
 
@@ -12,7 +12,11 @@ import {
 } from 'components';
 import { useTradeHash } from 'hooks';
 import { validationSchema, initialValues, Values } from './formik-data';
-import { tokenList, networkList, ROUTES } from '../../constants';
+import {
+  tokenList,
+  networkList,
+  // ROUTES,
+} from '../../constants';
 
 import styles from './styles.module.scss';
 
@@ -22,13 +26,16 @@ type Props = {
 
 export const TradeHash: FC<Props> = ({ methods }) => {
   const web3 = useWeb3React();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const formik = useFormik<Values>({
     initialValues,
     validationSchema,
-    onSubmit: (values) => {
+    onSubmit: (values, { setSubmitting }) => {
       console.log(values);
+      // if (true) return;
+      // navigate(ROUTES.claim);
+      setSubmitting(false);
     },
   });
 
@@ -40,12 +47,14 @@ export const TradeHash: FC<Props> = ({ methods }) => {
       network,
       token,
     },
-    isValid,
-    // errors,
-    // touched,
+    handleSubmit,
     setFieldValue,
     handleBlur,
     handleChange,
+    isValid,
+    touched,
+    errors,
+    dirty,
   } = formik;
 
   const handleTradeHash = async () => {
@@ -78,7 +87,7 @@ export const TradeHash: FC<Props> = ({ methods }) => {
       title="Generating trade hash"
     >
 
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <h4 className={styles.title}>
           Recipient network
         </h4>
@@ -87,8 +96,11 @@ export const TradeHash: FC<Props> = ({ methods }) => {
           name='network'
           options={networkList}
           className={styles.dropdown}
-          onChange={handleChange}
+          onChange={(e) => {
+            setFieldValue('network', e);
+          }}
           onBlur={handleBlur}
+          error={touched?.network?.value && errors?.network?.value}
         />
 
         <Dropdown
@@ -96,8 +108,11 @@ export const TradeHash: FC<Props> = ({ methods }) => {
           value={token}
           options={tokenList}
           className={styles.dropdown}
-          onChange={handleChange}
+          onChange={(e) => {
+            setFieldValue('token', e);
+          }}
           onBlur={handleBlur}
+          error={touched?.token?.value && errors?.token?.value}
         />
 
         <div className={styles.inputWrapper}>
@@ -107,6 +122,7 @@ export const TradeHash: FC<Props> = ({ methods }) => {
             value={receiverAddress}
             placeholder="Receiver address"
             onBlur={handleBlur}
+            error={touched?.receiverAddress && errors?.receiverAddress}
           />
         </div>
 
@@ -117,6 +133,7 @@ export const TradeHash: FC<Props> = ({ methods }) => {
             value={amount}
             placeholder="Amount"
             onBlur={handleBlur}
+            error={touched?.amount && errors?.amount}
           />
         </div>
 
@@ -128,6 +145,7 @@ export const TradeHash: FC<Props> = ({ methods }) => {
             placeholder="Trade hash"
             onChange={handleChange}
             onBlur={handleBlur}
+            error={touched?.hash && errors?.hash}
           />
 
           <Button
@@ -139,9 +157,8 @@ export const TradeHash: FC<Props> = ({ methods }) => {
         </div>
 
         <Button
-          onClick={() => navigate(ROUTES.claim)}
           type="submit"
-          disabled={isValid}
+          disabled={!dirty || !isValid}
         >
           Lock
         </Button>

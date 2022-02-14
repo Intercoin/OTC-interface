@@ -15,4 +15,8 @@
   &:hover {
     opacity: 0.65;
   }
+
+  &:disabled {
+    background: rgb(176, 183, 185);
+  }
 }

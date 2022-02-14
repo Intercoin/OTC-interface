@@ -1,5 +1,8 @@
 import React, { FC } from 'react';
 import Select from 'react-select';
+import cn from 'classnames';
+
+import styles from './styles.module.scss';
 
 export type Value = {
   value: string,
@@ -9,6 +12,7 @@ export type Value = {
 type Props = {
   className?: string,
   name: string,
+  error?: string | boolean,
   value: Value,
   options: Value[],
   onChange: (Value) => void,
@@ -22,8 +26,9 @@ export const Dropdown: FC<Props> = ({
   onChange,
   name,
   onBlur,
+  error,
 }) => (
-  <div className={className}>
+  <div className={cn(className, { [styles.error]: !!error })}>
     <Select
       onBlur={onBlur}
       name={name}
