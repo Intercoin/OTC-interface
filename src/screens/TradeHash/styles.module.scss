@@ -29,3 +29,27 @@
 .title {
   margin: 0 0 10px;
 }
+
+.buttonGen {
+  margin-bottom: 3em;
+}
+
+.copyText {
+  transition: opacity $animation-time ease-out;
+}
+
+.checkImg {
+  position: absolute;
+  min-width: 25px;
+  min-height: 18px;
+  opacity: 0;
+  transition: opacity $animation-time ease-out;
+}
+
+.notCopy {
+  opacity: 0;
+}
+
+.copy {
+  opacity: 1;
+}

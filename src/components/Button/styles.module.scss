@@ -2,6 +2,9 @@
 @import '../../assets/styles/variables';
 
 .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   width: 100%;
   border-radius: $border-radius-sm;

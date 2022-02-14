@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 // import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -11,6 +11,9 @@ import {
   Container,
 } from 'components';
 import { useTradeHash } from 'hooks';
+import { copyText } from 'utils/copyText';
+import cn from 'classnames';
+import { ReactComponent as Check } from 'assets/images/lending/check.svg';
 import { validationSchema, initialValues, Values } from './formik-data';
 import {
   tokenList,
@@ -27,6 +30,8 @@ type Props = {
 export const TradeHash: FC<Props> = ({ methods }) => {
   const web3 = useWeb3React();
   // const navigate = useNavigate();
+
+  const [copyImgStyles, setCopyImgStyles] = useState<boolean>(false);
 
   const formik = useFormik<Values>({
     initialValues,
@@ -78,6 +83,15 @@ export const TradeHash: FC<Props> = ({ methods }) => {
     ).send({ from: web3.account });
 
     console.log('method lock', res);
+  };
+
+  /** handleCopyTradeHash function
+   in order to pass it on to the other party
+   */
+  const handleCopyTradeHash = () => {
+    copyText(hash);
+    setCopyImgStyles(true);
+    setTimeout(() => setCopyImgStyles(false), 1000);
   };
 
   return (
@@ -137,6 +151,14 @@ export const TradeHash: FC<Props> = ({ methods }) => {
           />
         </div>
 
+        <Button
+          className={styles.buttonGen}
+          onClick={() => handleTradeHash()}
+          disabled={!dirty || !!errors?.receiverAddress || !!errors?.amount}
+        >
+          Generating
+        </Button>
+
         <div className={styles.inputWrapper}>
           <Input
             name="hash"
@@ -150,9 +172,16 @@ export const TradeHash: FC<Props> = ({ methods }) => {
 
           <Button
             className={styles.button}
-            onClick={() => handleTradeHash()}
+            onClick={handleCopyTradeHash}
+            disabled={!hash}
           >
-            Gen
+
+            <div className={cn(styles.copyText, { [styles.notCopy]: copyImgStyles })}>
+              Copy
+            </div>
+
+            <Check className={cn(styles.checkImg, { [styles.copy]: copyImgStyles })} />
+
           </Button>
         </div>
 
