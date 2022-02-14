@@ -8,7 +8,7 @@ import {
   Input,
   Button,
   Dropdown,
-  Container,
+  Container, InputAmount,
 } from 'components';
 import { useTradeHash } from 'hooks';
 import { copyText } from 'utils/copyText';
@@ -141,7 +141,7 @@ export const TradeHash: FC<Props> = ({ methods }) => {
         </div>
 
         <div className={styles.inputWrapper}>
-          <Input
+          <InputAmount
             name="amount"
             onChange={handleChange}
             value={amount}
