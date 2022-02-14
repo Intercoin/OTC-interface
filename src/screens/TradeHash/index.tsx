@@ -203,7 +203,7 @@ export const TradeHash: FC<Props> = ({ methods }) => {
         <Button
           type="submit"
           disabled={!dirty || !isValid}
-          isLoading={!isLoading}
+          isLoading={isLoading}
         >
           Lock
         </Button>
