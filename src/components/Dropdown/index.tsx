@@ -8,9 +8,11 @@ export type Value = {
 
 type Props = {
   className?: string,
+  name: string,
   value: Value,
   options: Value[],
   onChange: (Value) => void,
+  onBlur: (Value) => void,
 };
 
 export const Dropdown: FC<Props> = ({
@@ -18,9 +20,13 @@ export const Dropdown: FC<Props> = ({
   value,
   options,
   onChange,
+  name,
+  onBlur,
 }) => (
   <div className={className}>
     <Select
+      onBlur={onBlur}
+      name={name}
       value={value}
       options={options}
       onChange={onChange}
