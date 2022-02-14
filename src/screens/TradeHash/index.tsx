@@ -17,7 +17,7 @@ import { ReactComponent as Check } from 'assets/images/lending/check.svg';
 import { validationSchema, initialValues, Values } from './formik-data';
 import {
   tokenList,
-  networkList,
+  networkList, REGEX,
   // ROUTES,
 } from '../../constants';
 
@@ -132,7 +132,9 @@ export const TradeHash: FC<Props> = ({ methods }) => {
         <div className={styles.inputWrapper}>
           <Input
             name="receiverAddress"
-            onChange={handleChange}
+            onChange={(e) => {
+              setFieldValue('receiverAddress', e.target.value.replace(REGEX.onlyLettersAndNumbers, ''));
+            }}
             value={receiverAddress}
             placeholder="Receiver address"
             onBlur={handleBlur}

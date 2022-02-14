@@ -1,5 +1,6 @@
 import { object, string } from 'yup';
 import { Value as ValueDropdown } from 'components/Dropdown';
+import { VALIDATION_ERROR_MESSAGES } from '../../constants';
 
 export type Values = {
   receiverAddress: string,
@@ -17,18 +18,16 @@ export const initialValues = {
   token: { value: 'USDT', label: 'USDT' },
 };
 
-const FIELD_IS_REQUIRED = 'Field is required';
-
 export const validationSchema = object().shape({
-  receiverAddress: string().required(FIELD_IS_REQUIRED),
-  amount: string().required(FIELD_IS_REQUIRED),
-  hash: string().required(FIELD_IS_REQUIRED),
+  receiverAddress: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
+  amount: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
+  hash: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
 
   network: object().shape({
-    value: string().required(FIELD_IS_REQUIRED),
+    value: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
   }),
 
   token: object().shape({
-    value: string().required(FIELD_IS_REQUIRED),
+    value: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
   }),
 });
