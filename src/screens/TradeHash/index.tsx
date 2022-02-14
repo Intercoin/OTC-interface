@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useNavigate } from 'react-router-dom';
+import Web3 from 'web3';
 
 import {
   Input,
@@ -14,7 +15,11 @@ import { tokenList, networkList, ROUTES } from '../../constants';
 
 import styles from './styles.module.scss';
 
-export const TradeHash: FC = () => {
+type Props = {
+  methods: any,
+};
+
+export const TradeHash: FC<Props> = ({ methods }) => {
   const web3 = useWeb3React();
   const navigate = useNavigate();
 
@@ -26,7 +31,7 @@ export const TradeHash: FC = () => {
 
   const [uuid, setUuid] = useState<string>('');
 
-  const handleTradeHash = () => {
+  const handleTradeHash = async () => {
     const { tradeHash, tradeString } = useTradeHash({
       network: network.value,
       chainId: web3.chainId,
@@ -39,6 +44,14 @@ export const TradeHash: FC = () => {
     });
 
     setUuid(tradeHash);
+    const w = await methods.lock(
+      `0x${tradeHash}`,
+      Web3.utils.toWei(amount, 'ether'),
+      token.value,
+      receiverAddress,
+      Web3.utils.toWei('0.1', 'ether'),
+    ).call();
+    console.log('methods', w);
     console.log('tradeHash', tradeHash);
     console.log('tradeString', tradeString);
   };
