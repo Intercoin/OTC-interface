@@ -13,10 +13,10 @@ import ERC20Abi from '../contracts/abi/erc20.json';
 type Methods = {
   methodsSwap: any,
   methodsERC20: any,
+  provider: any,
 };
 
 export const useLoadWeb3 = (address?: string): Methods => {
-  console.log('address', address);
   const web3 = useWeb3React();
   const provider = new Web3(Web3.givenProvider);
 
@@ -66,5 +66,6 @@ export const useLoadWeb3 = (address?: string): Methods => {
   return {
     methodsSwap,
     methodsERC20,
+    provider,
   };
 };

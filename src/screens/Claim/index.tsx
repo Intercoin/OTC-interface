@@ -5,19 +5,55 @@ import {
   Button,
   Container,
 } from 'components';
+import { useWeb3React } from '@web3-react/core';
 import { ROUTES } from '../../constants';
+import { useLoadWeb3 } from '../../hooks';
 
 import styles from './styles.module.scss';
 
-export const Claim: FC = () => {
-  const [partnersTradeHash, setPartnersTradeHash] = useState<string>('');
-  const [toAddress, setToAddress] = useState<string>('');
+type Props = {
+  tradeHash: string,
+};
 
+export const Claim: FC<Props> = ({ tradeHash }) => {
+  const web3 = useWeb3React();
+  const { provider } = useLoadWeb3();
+  const { methodsSwap } = useLoadWeb3();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [partnersTradeHash, setPartnersTradeHash] = useState<string>(tradeHash);
+
+  const handleSignTradeHash = async () => {
+    setIsLoading(true);
+    // @ts-ignore
+    const { ethereum } = window;
+
+    try {
+      const signature = await ethereum.request({
+        method: 'personal_sign', params: [web3.account, tradeHash],
+      });
+
+      await methodsSwap?.publish(
+        `0x${tradeHash}`,
+        signature,
+      ).send({ from: web3.account });
+
+      setIsLoading(false);
+    } catch (e) {
+      setIsLoading(false);
+      console.log(e);
+    }
+  };
+
+  console.log(provider);
+
+  // };
   return (
     <Container
       className={styles.container}
       text=''
-      title="Claim"
+      title="Publish"
       backRoute={ROUTES.root}
     >
 
@@ -28,20 +64,12 @@ export const Claim: FC = () => {
           placeholder="Trade hash"
         />
 
-        <Button className={styles.button}>
+        <Button
+          isLoading={isLoading}
+          className={styles.button}
+          onClick={handleSignTradeHash}
+        >
           Publish
-        </Button>
-      </div>
-
-      <div className={styles.inputWrapper}>
-        <Input
-          onChange={(e) => setToAddress(e.target.value)}
-          value={toAddress}
-          placeholder="Trade hash"
-        />
-
-        <Button className={styles.button}>
-          Claim
         </Button>
       </div>
 

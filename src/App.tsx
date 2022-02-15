@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Routes,
   Route,
@@ -7,7 +7,6 @@ import {
 import { useWeb3React } from '@web3-react/core';
 
 import { Header } from 'components';
-import { useLoadWeb3 } from 'hooks';
 import { ROUTES } from './constants';
 import { TradeHash, Claim } from './screens';
 import { injected } from './wallet/Connect';
@@ -17,7 +16,7 @@ import styles from './styles.module.scss';
 const App = () => {
   const web3 = useWeb3React();
 
-  const { methodsSwap } = useLoadWeb3();
+  const [tradeHash, setTradeHash] = useState<string>('');
 
   async function connect() {
     try {
@@ -40,16 +39,12 @@ const App = () => {
 
         <Route
           path={ROUTES.root}
-          element={
-            <TradeHash
-              methodsSwap={methodsSwap}
-            />
-          }
+          element={<TradeHash setTradeHash={setTradeHash} />}
         />
 
         <Route
           path={ROUTES.claim}
-          element={<Claim />}
+          element={<Claim tradeHash={tradeHash} />}
         />
 
         <Route

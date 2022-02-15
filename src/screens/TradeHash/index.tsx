@@ -28,10 +28,10 @@ import {
 import styles from './styles.module.scss';
 
 type Props = {
-  methodsSwap: any,
+  setTradeHash: (tradeHash: string) => void,
 };
 
-export const TradeHash: FC<Props> = ({ methodsSwap }) => {
+export const TradeHash: FC<Props> = ({ setTradeHash }) => {
   const web3 = useWeb3React();
   const navigate = useNavigate();
 
@@ -50,28 +50,24 @@ export const TradeHash: FC<Props> = ({ methodsSwap }) => {
     onSubmit,
   });
 
-  const { methodsERC20 } = useLoadWeb3(formik.values.token.value);
+  const { methodsERC20, methodsSwap } = useLoadWeb3(formik.values.token.value);
 
   async function onSubmit(values, { setSubmitting }) {
     setIsLoading(true);
 
     try {
-      const resApprove = await methodsERC20.approve(
+      await methodsERC20.approve(
         SWAP_RINKEBY_ADDRESS,
         Web3.utils.toWei(values.amount, 'ether'),
       ).send({ from: web3.account });
 
-      console.log('resApprove', resApprove);
-
-      const res = await methodsSwap?.lock(
+      await methodsSwap?.lock(
         `0x${values.hash}`,
         Web3.utils.toWei(values.amount, 'ether'),
         values.token.value,
         values.receiverAddress,
         Web3.utils.toWei('0.1', 'ether'),
       )?.send({ from: web3.account });
-
-      console.log('method lock', res);
 
       setIsLoading(false);
 
@@ -112,6 +108,7 @@ export const TradeHash: FC<Props> = ({ methodsSwap }) => {
       amount,
     });
 
+    await setTradeHash(tradeHash);
     await setFieldValue('hash', tradeHash);
   };
 
