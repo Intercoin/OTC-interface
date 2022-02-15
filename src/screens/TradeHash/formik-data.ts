@@ -9,13 +9,13 @@ export type Values = {
   network: ValueDropdown,
   token: ValueDropdown,
 };
-
+// 0x528e7c77B8F3001B512e8BF305b03CeA420951cd
 export const initialValues = {
   receiverAddress: '0x528e7c77B8F3001B512e8BF305b03CeA420951cd',
-  amount: '',
+  amount: '0.1',
   hash: '',
   network: { value: 'rinkeby', label: 'Rinkeby' },
-  token: { value: 'USDT', label: 'USDT' },
+  token: { value: '', label: 'Connect the network' },
 };
 
 export const validationSchema = object().shape({

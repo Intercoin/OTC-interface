@@ -1,4 +1,19 @@
-export const tokenList = [
-  { value: '0xc778417E063141139Fce010982780140Aa0cD5Ab', label: 'WETH' },
-  { value: '', label: 'USDT' },
+import {
+  WETH_RINKEBY_ADDRESS,
+  USDT_RINKEBY_ADDRESS,
+  USDT_BSC_TESTNET_ADDRESS,
+} from './hwAddress';
+
+export const TOKEN_LIST_RINKEBY = [
+  { value: WETH_RINKEBY_ADDRESS, label: 'WETH' },
+  { value: USDT_RINKEBY_ADDRESS, label: 'USDT' },
+];
+
+export const TOKEN_LIST_BSC = [
+  { value: '', label: 'WETH' },
+  { value: USDT_BSC_TESTNET_ADDRESS, label: 'USDT' },
+];
+
+export const TOKEN_LIST_DEFAULT = [
+  { value: '', label: 'Connect the network' },
 ];

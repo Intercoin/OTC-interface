@@ -17,7 +17,7 @@ import styles from './styles.module.scss';
 const App = () => {
   const web3 = useWeb3React();
 
-  const { methods } = useLoadWeb3();
+  const { methodsSwap } = useLoadWeb3();
 
   async function connect() {
     try {
@@ -40,7 +40,11 @@ const App = () => {
 
         <Route
           path={ROUTES.root}
-          element={<TradeHash methods={methods} />}
+          element={
+            <TradeHash
+              methodsSwap={methodsSwap}
+            />
+          }
         />
 
         <Route

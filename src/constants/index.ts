@@ -1,5 +1,5 @@
 export * from './routes';
 export * from './hwAddress';
 export * from './validation';
-export { tokenList } from './tokenList';
+export { TOKEN_LIST_RINKEBY, TOKEN_LIST_BSC, TOKEN_LIST_DEFAULT } from './tokenList';
 export { networkList } from './networkList';

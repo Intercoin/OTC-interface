@@ -10,29 +10,38 @@ import {
   Dropdown,
   Container, InputAmount,
 } from 'components';
-import { useTradeHash } from 'hooks';
+import { useLoadWeb3, useTradeHash } from 'hooks';
 import { copyText } from 'utils/copyText';
 import cn from 'classnames';
 import { ReactComponent as Check } from 'assets/images/lending/check.svg';
 import { validationSchema, initialValues, Values } from './formik-data';
 import {
-  tokenList,
-  networkList, REGEX,
+  SWAP_RINKEBY_ADDRESS,
+  TOKEN_LIST_DEFAULT,
+  TOKEN_LIST_RINKEBY,
+  TOKEN_LIST_BSC,
+  networkList,
+  REGEX,
   ROUTES,
 } from '../../constants';
 
 import styles from './styles.module.scss';
 
 type Props = {
-  methods: any,
+  methodsSwap: any,
 };
 
-export const TradeHash: FC<Props> = ({ methods }) => {
+export const TradeHash: FC<Props> = ({ methodsSwap }) => {
   const web3 = useWeb3React();
   const navigate = useNavigate();
 
   const [copyImgStyles, setCopyImgStyles] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const tokenList = {
+    4: TOKEN_LIST_RINKEBY,
+    97: TOKEN_LIST_BSC,
+  };
 
   const formik = useFormik<Values>({
     initialValues,
@@ -41,11 +50,20 @@ export const TradeHash: FC<Props> = ({ methods }) => {
     onSubmit,
   });
 
+  const { methodsERC20 } = useLoadWeb3(formik.values.token.value);
+
   async function onSubmit(values, { setSubmitting }) {
     setIsLoading(true);
 
     try {
-      const res = await methods?.lock(
+      const resApprove = await methodsERC20.approve(
+        SWAP_RINKEBY_ADDRESS,
+        Web3.utils.toWei(values.amount, 'ether'),
+      ).send({ from: web3.account });
+
+      console.log('resApprove', resApprove);
+
+      const res = await methodsSwap?.lock(
         `0x${values.hash}`,
         Web3.utils.toWei(values.amount, 'ether'),
         values.token.value,
@@ -85,7 +103,6 @@ export const TradeHash: FC<Props> = ({ methods }) => {
   } = formik;
 
   const handleTradeHash = async () => {
-    console.log('values', methods);
     const { tradeHash } = useTradeHash({
       network: network.value,
       chainId: web3.chainId,
@@ -133,7 +150,7 @@ export const TradeHash: FC<Props> = ({ methods }) => {
         <Dropdown
           name="token"
           value={token}
-          options={tokenList}
+          options={web3.chainId ? tokenList[web3.chainId] : TOKEN_LIST_DEFAULT}
           className={styles.dropdown}
           onChange={(e) => {
             setFieldValue('token', e);

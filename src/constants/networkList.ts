@@ -1,4 +1,4 @@
 export const networkList = [
-  { value: '', label: 'Rinkeby' },
-  { value: '', label: 'BSC' },
+  { value: 'rinkeby', label: 'Rinkeby' },
+  { value: 'bsc', label: 'BSC' },
 ];

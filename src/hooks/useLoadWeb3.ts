@@ -3,18 +3,25 @@ import { useWeb3React } from '@web3-react/core';
 import Web3 from 'web3';
 import { injected } from '../wallet/Connect';
 import bscAbi from '../contracts/abi/bsc.json';
-import { hwAddressBSC, hwAddressR } from '../constants';
+import {
+  SWAP_BSC_TESTNET_ADDRESS,
+  SWAP_RINKEBY_ADDRESS,
+} from '../constants';
 import rinkebyAbi from '../contracts/abi/rinkeby.json';
+import ERC20Abi from '../contracts/abi/erc20.json';
 
 type Methods = {
-  methods: any,
+  methodsSwap: any,
+  methodsERC20: any,
 };
 
-export const useLoadWeb3 = (): Methods => {
+export const useLoadWeb3 = (address?: string): Methods => {
+  console.log('address', address);
   const web3 = useWeb3React();
   const provider = new Web3(Web3.givenProvider);
 
-  let methods;
+  let methodsSwap;
+  let methodsERC20;
 
   useEffect(() => {
     async function load() {
@@ -34,23 +41,30 @@ export const useLoadWeb3 = (): Methods => {
   switch (web3.chainId) {
     case 97: {
       // @ts-ignore
-      const contractList = new provider.eth.Contract(bscAbi, hwAddressBSC);
-      methods = contractList?.methods;
+      methodsSwap = new provider.eth.Contract(bscAbi, SWAP_BSC_TESTNET_ADDRESS)?.methods;
+      if (!address) break;
+      // @ts-ignore
+      methodsERC20 = new provider.eth.Contract(ERC20Abi, address)?.methods;
 
       break;
     }
 
     case 4: {
       // @ts-ignore
-      const contractList = new provider.eth.Contract(rinkebyAbi, hwAddressR);
-      methods = contractList?.methods;
+      methodsSwap = new provider.eth.Contract(rinkebyAbi, SWAP_RINKEBY_ADDRESS)?.methods;
+      if (!address) break;
+      // @ts-ignore
+      methodsERC20 = new provider.eth.Contract(ERC20Abi, address)?.methods;
 
       break;
     }
 
     default:
-      methods = null;
+      methodsSwap = null;
   }
 
-  return { methods };
+  return {
+    methodsSwap,
+    methodsERC20,
+  };
 };
