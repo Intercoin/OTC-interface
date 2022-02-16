@@ -38,11 +38,11 @@ export const validationSchema = object().shape({
   }),
 
   recipientAddress: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
-  receiverAmount: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
+  recipientAmount: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
   recipientPenalty: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
 
   recipientNetwork: object().shape({
-    value: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
+    value: object().required({ chainId: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED) }),
   }),
 
   recipientToken: object().shape({

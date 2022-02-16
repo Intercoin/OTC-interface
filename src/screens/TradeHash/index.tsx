@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -8,7 +8,8 @@ import {
   Input,
   Button,
   Dropdown,
-  Container, InputAmount,
+  Container,
+  InputAmount,
 } from 'components';
 import { useLoadWeb3, useTradeHash } from 'hooks';
 import { copyText, defineNetwork } from 'utils';
@@ -138,6 +139,18 @@ export const TradeHash: FC<Props> = ({ setTradeHash }) => {
     setTimeout(() => setCopyImgStyles(false), 1000);
   };
 
+  const disabledGeneratingTradeHash = useMemo(() => (
+    !dirty ||
+    !!errors?.recipientAddress ||
+    !!errors?.recipientNetwork?.value ||
+      !!errors?.recipientToken?.value ||
+      !!errors?.recipientAmount ||
+      !!errors?.recipientPenalty ||
+      !!errors?.senderToken?.value ||
+      !!errors?.senderAmount ||
+      !!errors?.senderPenalty
+  ), [errors, dirty]);
+
   return (
     <Container
       className={styles.container}
@@ -251,7 +264,7 @@ export const TradeHash: FC<Props> = ({ setTradeHash }) => {
         <Button
           className={styles.mb}
           onClick={() => handleGeneratingTradeHash()}
-          disabled={!dirty || !!errors?.recipientAddress || !!errors?.recipientAddress}
+          disabled={disabledGeneratingTradeHash}
         >
           Generating
         </Button>
