@@ -5,7 +5,7 @@ import cn from 'classnames';
 import styles from './styles.module.scss';
 
 export type Value = {
-  value: string,
+  value: any,
   label: string
 };
 

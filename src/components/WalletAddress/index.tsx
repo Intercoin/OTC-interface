@@ -4,7 +4,7 @@ import cn from 'classnames';
 
 import { ReactComponent as Wallet } from 'assets/images/lending/wallet.svg';
 import { ReactComponent as Check } from 'assets/images/lending/check.svg';
-import { copyText } from 'utils/copyText';
+import { copyText } from 'utils';
 
 import styles from './styles.module.scss';
 

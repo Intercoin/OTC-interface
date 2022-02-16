@@ -11,7 +11,7 @@ import {
   Container, InputAmount,
 } from 'components';
 import { useLoadWeb3, useTradeHash } from 'hooks';
-import { copyText } from 'utils/copyText';
+import { copyText, defineNetwork } from 'utils';
 import cn from 'classnames';
 import { ReactComponent as Check } from 'assets/images/lending/check.svg';
 import { validationSchema, initialValues, Values } from './formik-data';
@@ -50,7 +50,7 @@ export const TradeHash: FC<Props> = ({ setTradeHash }) => {
     onSubmit,
   });
 
-  const { methodsERC20, methodsSwap } = useLoadWeb3(formik.values.token.value);
+  const { methodsERC20, methodsSwap } = useLoadWeb3(formik.values.recipientToken.value);
 
   async function onSubmit(values, { setSubmitting }) {
     setIsLoading(true);
@@ -82,11 +82,15 @@ export const TradeHash: FC<Props> = ({ setTradeHash }) => {
 
   const {
     values: {
-      receiverAddress,
-      amount,
+      recipientNetwork,
+      recipientToken,
+      recipientAddress,
+      recipientAmount,
+      recipientPenalty,
+      senderToken,
+      senderAmount,
+      senderPenalty,
       hash,
-      network,
-      token,
     },
     handleSubmit,
     setFieldValue,
@@ -98,14 +102,27 @@ export const TradeHash: FC<Props> = ({ setTradeHash }) => {
     dirty,
   } = formik;
 
-  const handleTradeHash = async () => {
+  const handleGeneratingTradeHash = async () => {
+    const { networkName } = defineNetwork(web3.chainId);
+
     const { tradeHash } = useTradeHash({
-      network: network.value,
-      chainId: web3.chainId,
-      fromAddress: web3.account,
-      toAddress: receiverAddress,
-      token: token.value,
-      amount,
+      senderChainId: web3.chainId,
+      recipientChainId: recipientNetwork.value.chainId,
+
+      senderNetwork: networkName,
+      recipientNetwork: recipientNetwork.value.name,
+
+      senderAddress: web3.account || '',
+      recipientAddress,
+
+      senderAmount,
+      recipientAmount,
+
+      senderToken: senderToken.value,
+      recipientToken: recipientToken.value,
+
+      senderPenalty,
+      recipientPenalty,
     });
 
     await setTradeHash(tradeHash);
@@ -133,57 +150,108 @@ export const TradeHash: FC<Props> = ({ setTradeHash }) => {
           Recipient network
         </h4>
         <Dropdown
-          value={network}
-          name='network'
+          value={recipientNetwork}
+          name='recipientNetwork'
           options={networkList}
           className={styles.dropdown}
           onChange={(e) => {
-            setFieldValue('network', e);
+            setFieldValue('recipientNetwork', e);
           }}
           onBlur={handleBlur}
-          error={touched?.network?.value && errors?.network?.value}
+          error={!!touched?.recipientNetwork?.value && !!errors?.recipientNetwork?.value}
         />
 
+        <h4 className={styles.title}>
+          Recipient token
+        </h4>
         <Dropdown
-          name="token"
-          value={token}
-          options={web3.chainId ? tokenList[web3.chainId] : TOKEN_LIST_DEFAULT}
+          name="recipientToken"
+          value={recipientToken}
+          options={recipientNetwork.value.chainId ? tokenList[recipientNetwork.value.chainId] : TOKEN_LIST_DEFAULT}
           className={styles.dropdown}
           onChange={(e) => {
-            setFieldValue('token', e);
+            setFieldValue('recipientToken', e);
           }}
           onBlur={handleBlur}
-          error={touched?.token?.value && errors?.token?.value}
+          error={!!touched?.recipientToken?.value && !!errors?.recipientToken?.value}
         />
 
         <div className={styles.inputWrapper}>
           <Input
-            name="receiverAddress"
+            name="recipientAddress"
             onChange={(e) => {
-              setFieldValue('receiverAddress', e.target.value.replace(REGEX.onlyLettersAndNumbers, ''));
+              setFieldValue('recipientAddress', e.target.value.replace(REGEX.onlyLettersAndNumbers, ''));
             }}
-            value={receiverAddress}
-            placeholder="Receiver address"
+            value={recipientAddress}
+            placeholder="Recipient address"
             onBlur={handleBlur}
-            error={touched?.receiverAddress && errors?.receiverAddress}
+            error={touched?.recipientAddress && errors?.recipientAddress}
           />
         </div>
 
         <div className={styles.inputWrapper}>
           <InputAmount
-            name="amount"
+            name="recipientAmount"
             onChange={handleChange}
-            value={amount}
-            placeholder="Amount"
+            value={recipientAmount}
+            placeholder="Recipient amount"
             onBlur={handleBlur}
-            error={touched?.amount && errors?.amount}
+            error={touched?.recipientAmount && errors?.recipientAmount}
+          />
+        </div>
+
+        <div className={cn(styles.inputWrapper, styles.mb)}>
+          <InputAmount
+            name="recipientPenalty"
+            onChange={handleChange}
+            value={recipientPenalty}
+            placeholder="Recipient penalty"
+            onBlur={handleBlur}
+            error={touched?.recipientPenalty && errors?.recipientPenalty}
+          />
+        </div>
+
+        <h4 className={styles.title}>
+          Your token
+        </h4>
+        <Dropdown
+          name="senderToken"
+          value={senderToken}
+          options={web3.chainId ? tokenList[web3.chainId] : TOKEN_LIST_DEFAULT}
+          className={styles.dropdown}
+          onChange={(e) => {
+            setFieldValue('senderToken', e);
+          }}
+          onBlur={handleBlur}
+          error={!!touched?.senderToken?.value && !!errors?.senderToken?.value}
+        />
+
+        <div className={styles.inputWrapper}>
+          <InputAmount
+            name="senderAmount"
+            onChange={handleChange}
+            value={senderAmount}
+            placeholder="Your Amount"
+            onBlur={handleBlur}
+            error={touched?.senderAmount && errors?.senderAmount}
+          />
+        </div>
+
+        <div className={styles.inputWrapper}>
+          <InputAmount
+            name="senderPenalty"
+            onChange={handleChange}
+            value={senderPenalty}
+            placeholder="Penalty"
+            onBlur={handleBlur}
+            error={touched?.senderPenalty && errors?.senderPenalty}
           />
         </div>
 
         <Button
-          className={styles.buttonGen}
-          onClick={() => handleTradeHash()}
-          disabled={!dirty || !!errors?.receiverAddress || !!errors?.amount}
+          className={styles.mb}
+          onClick={() => handleGeneratingTradeHash()}
+          disabled={!dirty || !!errors?.recipientAddress || !!errors?.recipientAddress}
         >
           Generating
         </Button>

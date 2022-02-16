@@ -1,7 +1,7 @@
 import {
   WETH_RINKEBY_ADDRESS,
   USDT_RINKEBY_ADDRESS,
-  USDT_BSC_TESTNET_ADDRESS,
+  BUSD_BSC_TESTNET_ADDRESS,
 } from './hwAddress';
 
 export const TOKEN_LIST_RINKEBY = [
@@ -11,7 +11,7 @@ export const TOKEN_LIST_RINKEBY = [
 
 export const TOKEN_LIST_BSC = [
   { value: '', label: 'WETH' },
-  { value: USDT_BSC_TESTNET_ADDRESS, label: 'USDT' },
+  { value: BUSD_BSC_TESTNET_ADDRESS, label: 'BUSD' },
 ];
 
 export const TOKEN_LIST_DEFAULT = [
