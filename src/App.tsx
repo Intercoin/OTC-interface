@@ -8,7 +8,7 @@ import { useWeb3React } from '@web3-react/core';
 
 import { Header } from 'components';
 import { ROUTES } from './constants';
-import { TradeHash, Claim } from './screens';
+import { TradeHash, Publish } from './screens';
 import { injected } from './wallet/Connect';
 
 import styles from './styles.module.scss';
@@ -44,7 +44,7 @@ const App = () => {
 
         <Route
           path={ROUTES.claim}
-          element={<Claim tradeHash={tradeHash} />}
+          element={<Publish tradeHash={tradeHash} />}
         />
 
         <Route

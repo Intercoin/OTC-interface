@@ -53,8 +53,6 @@ export const useTradeHash = ({
   ${senderPenalty}${recipientPenalty}
   ${timestamp}`;
 
-  console.log(tradeString);
-
   const tradeHash = keccak256(tradeString).toString('hex');
 
   return { tradeHash, tradeString };

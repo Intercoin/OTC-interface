@@ -15,7 +15,7 @@ type Props = {
   tradeHash: string,
 };
 
-export const Claim: FC<Props> = ({ tradeHash }) => {
+export const Publish: FC<Props> = ({ tradeHash }) => {
   const web3 = useWeb3React();
   const { provider } = useLoadWeb3();
   const { methodsSwap } = useLoadWeb3();

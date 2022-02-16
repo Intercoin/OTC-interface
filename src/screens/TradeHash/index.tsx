@@ -17,6 +17,7 @@ import cn from 'classnames';
 import { ReactComponent as Check } from 'assets/images/lending/check.svg';
 import { validationSchema, initialValues, Values } from './formik-data';
 import {
+  SWAP_BSC_TESTNET_ADDRESS,
   SWAP_RINKEBY_ADDRESS,
   TOKEN_LIST_DEFAULT,
   TOKEN_LIST_RINKEBY,
@@ -32,17 +33,22 @@ type Props = {
   setTradeHash: (tradeHash: string) => void,
 };
 
+const TOKENS_LIST = {
+  4: TOKEN_LIST_RINKEBY,
+  97: TOKEN_LIST_BSC,
+};
+
+const SWAP_CONTRACTS_LIST = {
+  4: SWAP_RINKEBY_ADDRESS,
+  97: SWAP_BSC_TESTNET_ADDRESS,
+};
+
 export const TradeHash: FC<Props> = ({ setTradeHash }) => {
   const web3 = useWeb3React();
   const navigate = useNavigate();
 
   const [copyImgStyles, setCopyImgStyles] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const tokenList = {
-    4: TOKEN_LIST_RINKEBY,
-    97: TOKEN_LIST_BSC,
-  };
 
   const formik = useFormik<Values>({
     initialValues,
@@ -51,23 +57,43 @@ export const TradeHash: FC<Props> = ({ setTradeHash }) => {
     onSubmit,
   });
 
-  const { methodsERC20, methodsSwap } = useLoadWeb3(formik.values.recipientToken.value);
+  const {
+    methodsERC20,
+    methodsSwap,
+  } = useLoadWeb3(formik.values.senderToken.value);
 
   async function onSubmit(values, { setSubmitting }) {
     setIsLoading(true);
 
     try {
-      await methodsERC20.approve(
-        SWAP_RINKEBY_ADDRESS,
-        Web3.utils.toWei(values.amount, 'ether'),
-      ).send({ from: web3.account });
+      /**
+       * number of tokens allowed
+       */
+      const allowance = await methodsERC20.allowance(
+        web3.account,
+        SWAP_CONTRACTS_LIST[web3.chainId || 0],
+      ).call();
+
+      /**
+       * If there is not enough money to make a transaction, the statement is not called
+       */
+
+      if (!Web3.utils.toBN(allowance).gte(Web3.utils.toWei(values.senderAmount, 'ether'))) {
+        /**
+         * is called to resolve the transaction
+         */
+        await methodsERC20.approve(
+          SWAP_CONTRACTS_LIST[web3.chainId || 0],
+          Web3.utils.toWei(values.senderAmount, 'ether'),
+        ).send({ from: web3.account });
+      }
 
       await methodsSwap?.lock(
         `0x${values.hash}`,
-        Web3.utils.toWei(values.amount, 'ether'),
-        values.token.value,
-        values.receiverAddress,
-        Web3.utils.toWei('0.1', 'ether'),
+        Web3.utils.toWei(values.senderAmount, 'ether'),
+        values.senderToken.value,
+        values.recipientAddress,
+        Web3.utils.toWei(values.senderPenalty, 'ether'),
       )?.send({ from: web3.account });
 
       setIsLoading(false);
@@ -160,6 +186,43 @@ export const TradeHash: FC<Props> = ({ setTradeHash }) => {
 
       <form onSubmit={handleSubmit}>
         <h4 className={styles.title}>
+          Your token
+        </h4>
+        <Dropdown
+          name="senderToken"
+          value={senderToken}
+          options={web3.chainId ? TOKENS_LIST[web3.chainId] : TOKEN_LIST_DEFAULT}
+          className={styles.dropdown}
+          onChange={(e) => {
+            setFieldValue('senderToken', e);
+          }}
+          onBlur={handleBlur}
+          error={!!touched?.senderToken?.value && !!errors?.senderToken?.value}
+        />
+
+        <div className={styles.inputWrapper}>
+          <InputAmount
+            name="senderAmount"
+            onChange={handleChange}
+            value={senderAmount}
+            placeholder="Your Amount"
+            onBlur={handleBlur}
+            error={touched?.senderAmount && errors?.senderAmount}
+          />
+        </div>
+
+        <div className={cn(styles.inputWrapper, styles.mb)}>
+          <InputAmount
+            name="senderPenalty"
+            onChange={handleChange}
+            value={senderPenalty}
+            placeholder="Your Penalty"
+            onBlur={handleBlur}
+            error={touched?.senderPenalty && errors?.senderPenalty}
+          />
+        </div>
+
+        <h4 className={styles.title}>
           Recipient network
         </h4>
         <Dropdown
@@ -180,7 +243,7 @@ export const TradeHash: FC<Props> = ({ setTradeHash }) => {
         <Dropdown
           name="recipientToken"
           value={recipientToken}
-          options={recipientNetwork.value.chainId ? tokenList[recipientNetwork.value.chainId] : TOKEN_LIST_DEFAULT}
+          options={recipientNetwork.value.chainId ? TOKENS_LIST[recipientNetwork.value.chainId] : TOKEN_LIST_DEFAULT}
           className={styles.dropdown}
           onChange={(e) => {
             setFieldValue('recipientToken', e);
@@ -213,7 +276,7 @@ export const TradeHash: FC<Props> = ({ setTradeHash }) => {
           />
         </div>
 
-        <div className={cn(styles.inputWrapper, styles.mb)}>
+        <div className={styles.inputWrapper}>
           <InputAmount
             name="recipientPenalty"
             onChange={handleChange}
@@ -221,43 +284,6 @@ export const TradeHash: FC<Props> = ({ setTradeHash }) => {
             placeholder="Recipient penalty"
             onBlur={handleBlur}
             error={touched?.recipientPenalty && errors?.recipientPenalty}
-          />
-        </div>
-
-        <h4 className={styles.title}>
-          Your token
-        </h4>
-        <Dropdown
-          name="senderToken"
-          value={senderToken}
-          options={web3.chainId ? tokenList[web3.chainId] : TOKEN_LIST_DEFAULT}
-          className={styles.dropdown}
-          onChange={(e) => {
-            setFieldValue('senderToken', e);
-          }}
-          onBlur={handleBlur}
-          error={!!touched?.senderToken?.value && !!errors?.senderToken?.value}
-        />
-
-        <div className={styles.inputWrapper}>
-          <InputAmount
-            name="senderAmount"
-            onChange={handleChange}
-            value={senderAmount}
-            placeholder="Your Amount"
-            onBlur={handleBlur}
-            error={touched?.senderAmount && errors?.senderAmount}
-          />
-        </div>
-
-        <div className={styles.inputWrapper}>
-          <InputAmount
-            name="senderPenalty"
-            onChange={handleChange}
-            value={senderPenalty}
-            placeholder="Penalty"
-            onBlur={handleBlur}
-            error={touched?.senderPenalty && errors?.senderPenalty}
           />
         </div>
 
