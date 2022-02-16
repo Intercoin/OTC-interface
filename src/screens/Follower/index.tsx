@@ -1,0 +1,1 @@
+export { TradeHashFollower } from './TradeHashFollower';

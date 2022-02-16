@@ -1,11 +1,31 @@
 const ROOT_PREFIX = process?.env?.REACT_APP_ROOT_EXTRA_URL;
 
 type Routes = {
-  root: string,
-  claim: string,
+  switchRole: {
+    root: string,
+  },
+  creator: {
+    root: string,
+    generating: string,
+    publish: string,
+  },
+  follower: {
+    root: string,
+    generating: string,
+  }
 };
 
 export const ROUTES: Routes = {
-  root: `${ROOT_PREFIX}/generating`,
-  claim: `${ROOT_PREFIX}/claim`,
+  switchRole: {
+    root: `${ROOT_PREFIX}/role`,
+  },
+  creator: {
+    root: `${ROOT_PREFIX}/creator`,
+    generating: `${ROOT_PREFIX}/creator/generating`,
+    publish: `${ROOT_PREFIX}/creator/publish`,
+  },
+  follower: {
+    root: `${ROOT_PREFIX}/follower`,
+    generating: `${ROOT_PREFIX}/follower/generating`,
+  },
 };

@@ -6,8 +6,8 @@ import {
   Container,
 } from 'components';
 import { useWeb3React } from '@web3-react/core';
-import { ROUTES } from '../../constants';
-import { useLoadWeb3 } from '../../hooks';
+import { ROUTES } from '../../../constants';
+import { useLoadWeb3 } from '../../../hooks';
 
 import styles from './styles.module.scss';
 
@@ -15,7 +15,7 @@ type Props = {
   tradeHash: string,
 };
 
-export const Publish: FC<Props> = ({ tradeHash }) => {
+export const PublishCreate: FC<Props> = ({ tradeHash }) => {
   const web3 = useWeb3React();
   const { provider } = useLoadWeb3();
   const { methodsSwap } = useLoadWeb3();
@@ -54,7 +54,7 @@ export const Publish: FC<Props> = ({ tradeHash }) => {
       className={styles.container}
       text=''
       title="Publish"
-      backRoute={ROUTES.root}
+      backRoute={ROUTES.creator.publish}
     >
 
       <div className={styles.inputWrapper}>

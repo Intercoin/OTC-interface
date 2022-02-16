@@ -8,7 +8,12 @@ import { useWeb3React } from '@web3-react/core';
 
 import { Header } from 'components';
 import { ROUTES } from './constants';
-import { TradeHash, Publish } from './screens';
+import {
+  SwitchRole,
+  TradeHashCreate,
+  PublishCreate,
+  TradeHashFollower,
+} from './screens';
 import { injected } from './wallet/Connect';
 
 import styles from './styles.module.scss';
@@ -38,18 +43,28 @@ const App = () => {
       <Routes>
 
         <Route
-          path={ROUTES.root}
-          element={<TradeHash setTradeHash={setTradeHash} />}
+          path={ROUTES.creator.generating}
+          element={<TradeHashCreate setTradeHash={setTradeHash} />}
         />
 
         <Route
-          path={ROUTES.claim}
-          element={<Publish tradeHash={tradeHash} />}
+          path={ROUTES.creator.publish}
+          element={<PublishCreate tradeHash={tradeHash} />}
+        />
+
+        <Route
+          path={ROUTES.follower.generating}
+          element={<TradeHashFollower />}
+        />
+
+        <Route
+          path={ROUTES.switchRole.root}
+          element={<SwitchRole />}
         />
 
         <Route
           path="*"
-          element={<Navigate to={ROUTES.root} />}
+          element={<Navigate to={ROUTES.switchRole.root} />}
         />
 
       </Routes>

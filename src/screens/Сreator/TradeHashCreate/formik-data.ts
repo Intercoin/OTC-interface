@@ -1,6 +1,6 @@
 import { object, string } from 'yup';
 import { Value as ValueDropdown } from 'components/Dropdown';
-import { VALIDATION_ERROR_MESSAGES } from '../../constants';
+import { VALIDATION_ERROR_MESSAGES } from '../../../constants';
 
 export type Values = {
   senderAmount: string,

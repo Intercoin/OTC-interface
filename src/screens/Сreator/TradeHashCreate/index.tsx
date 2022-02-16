@@ -25,7 +25,7 @@ import {
   networkList,
   REGEX,
   ROUTES,
-} from '../../constants';
+} from '../../../constants';
 
 import styles from './styles.module.scss';
 
@@ -43,7 +43,7 @@ const SWAP_CONTRACTS_LIST = {
   97: SWAP_BSC_TESTNET_ADDRESS,
 };
 
-export const TradeHash: FC<Props> = ({ setTradeHash }) => {
+export const TradeHashCreate: FC<Props> = ({ setTradeHash }) => {
   const web3 = useWeb3React();
   const navigate = useNavigate();
 
@@ -98,7 +98,7 @@ export const TradeHash: FC<Props> = ({ setTradeHash }) => {
 
       setIsLoading(false);
 
-      navigate(ROUTES.claim);
+      navigate(ROUTES.creator.publish);
     } catch (e) {
       setIsLoading(false);
       console.log(e);
