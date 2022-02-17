@@ -181,7 +181,8 @@ export const TradeHashCreate: FC<Props> = ({ setTradeHash }) => {
     <Container
       className={styles.container}
       text=''
-      title="Generating trade hash"
+      title="Generating trade hash(Creator)"
+      backRoute={ROUTES.switchRole.root}
     >
 
       <form onSubmit={handleSubmit}>

@@ -21,7 +21,7 @@ import styles from './styles.module.scss';
 const App = () => {
   const web3 = useWeb3React();
 
-  const [tradeHash, setTradeHash] = useState<string>('');
+  const [tradeHash, setTradeHash] = useState<string>('a7a40e0dcce032726491540456e33cc8260b28f8f85b30b72bc1f40e34a0547d');
 
   async function connect() {
     try {

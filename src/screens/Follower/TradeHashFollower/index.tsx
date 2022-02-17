@@ -22,7 +22,7 @@ import {
   TOKEN_LIST_DEFAULT,
   TOKEN_LIST_RINKEBY,
   TOKEN_LIST_BSC,
-  REGEX,
+  REGEX, ROUTES,
   // ROUTES,
 } from '../../../constants';
 
@@ -73,7 +73,7 @@ export const TradeHashFollower: FC = () => {
        * If there is not enough money to make a transaction, the statement is not called
        */
 
-      if (!Web3.utils.toBN(allowance).gte(Web3.utils.toWei(values.senderAmount, 'ether'))) {
+      if (!Web3.utils.toBN(allowance).lte(Web3.utils.toWei(values.senderAmount, 'ether'))) {
         /**
          * is called to resolve the transaction
          */
@@ -133,7 +133,8 @@ export const TradeHashFollower: FC = () => {
     <Container
       className={styles.container}
       text=''
-      title="Generating trade hash"
+      title="Generating trade hash(Follower)"
+      backRoute={ROUTES.switchRole.root}
     >
 
       <form onSubmit={handleSubmit}>

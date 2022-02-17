@@ -31,11 +31,11 @@ export const PublishCreate: FC<Props> = ({ tradeHash }) => {
 
     try {
       const signature = await ethereum.request({
-        method: 'personal_sign', params: [web3.account, tradeHash],
+        method: 'personal_sign', params: [web3.account, partnersTradeHash],
       });
 
       await methodsSwap?.publish(
-        `0x${tradeHash}`,
+        `0x${partnersTradeHash}`,
         signature,
       ).send({ from: web3.account });
 
@@ -54,7 +54,7 @@ export const PublishCreate: FC<Props> = ({ tradeHash }) => {
       className={styles.container}
       text=''
       title="Publish"
-      backRoute={ROUTES.creator.publish}
+      backRoute={ROUTES.creator.generating}
     >
 
       <div className={styles.inputWrapper}>
