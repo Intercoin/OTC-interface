@@ -27,16 +27,38 @@ export const PublishCreate: FC<Props> = ({ tradeHash }) => {
   const handleSignTradeHash = async () => {
     setIsLoading(true);
     // @ts-ignore
-    const { ethereum } = window;
+    // const { ethereum } = window;
 
     try {
-      const signature = await ethereum.request({
-        method: 'personal_sign', params: [web3.account, partnersTradeHash],
-      });
+      // const signature = await ethereum.request({
+      //   method: 'personal_sign',
+      //   params: [web3.account, '0x9942e071696b405eb48ca3529b19a3e9d822b05d5a4c7827e97f734b400f919c'],
+      // });
+      // console.log(signature);
+
+      const signature2 = await provider.eth.sign(
+        `0x${partnersTradeHash}`,
+        web3.account,
+      );
+      console.log(signature2);
+
+      // const signature3 = await ethereum.request({
+      //   method: 'personal_sign',
+      //   params: [web3.account, '9942e071696b405eb48ca3529b19a3e9d822b05d5a4c7827e97f734b400f919c'],
+      // });
+      // console.log(signature3);
+
+      // const signature4 = await provider.eth.sign(
+      //   '9942e071696b405eb48ca3529b19a3e9d822b05d5a4c7827e97f734b400f919c',
+      //   web3.account,
+      // );
+      // console.log(signature4);
+
+      // sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message))).
 
       await methodsSwap?.publish(
         `0x${partnersTradeHash}`,
-        signature,
+        signature2,
       ).send({ from: web3.account });
 
       setIsLoading(false);
