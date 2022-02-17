@@ -1,3 +1,3 @@
 export { TradeHashCreate, PublishCreate } from './Сreator';
-export { TradeHashFollower } from './Follower';
+export { TradeHashFollower, PublishFollower } from './Follower';
 export { SwitchRole } from './SwitchRole';

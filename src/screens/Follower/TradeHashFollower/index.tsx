@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import Web3 from 'web3';
 
@@ -22,8 +22,8 @@ import {
   TOKEN_LIST_DEFAULT,
   TOKEN_LIST_RINKEBY,
   TOKEN_LIST_BSC,
-  REGEX, ROUTES,
-  // ROUTES,
+  REGEX,
+  ROUTES,
 } from '../../../constants';
 
 import styles from './styles.module.scss';
@@ -40,7 +40,7 @@ const SWAP_CONTRACTS_LIST = {
 
 export const TradeHashFollower: FC = () => {
   const web3 = useWeb3React();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [copyImgStyles, setCopyImgStyles] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -56,6 +56,24 @@ export const TradeHashFollower: FC = () => {
     methodsERC20,
     methodsSwap,
   } = useLoadWeb3(formik.values.senderToken.value);
+
+  const {
+    values: {
+      recipientAddress,
+      senderToken,
+      senderAmount,
+      senderPenalty,
+      hash,
+    },
+    handleSubmit,
+    setFieldValue,
+    handleBlur,
+    handleChange,
+    isValid,
+    touched,
+    errors,
+    dirty,
+  } = formik;
 
   async function onSubmit(values, { setSubmitting }) {
     setIsLoading(true);
@@ -93,7 +111,7 @@ export const TradeHashFollower: FC = () => {
 
       setIsLoading(false);
 
-      // navigate(ROUTES.follower.root);
+      navigate(ROUTES.follower.publish.to(hash));
     } catch (e) {
       setIsLoading(false);
       console.log(e);
@@ -101,24 +119,6 @@ export const TradeHashFollower: FC = () => {
 
     setSubmitting(false);
   }
-
-  const {
-    values: {
-      recipientAddress,
-      senderToken,
-      senderAmount,
-      senderPenalty,
-      hash,
-    },
-    handleSubmit,
-    setFieldValue,
-    handleBlur,
-    handleChange,
-    isValid,
-    touched,
-    errors,
-    dirty,
-  } = formik;
 
   /** handleCopyTradeHash function
    in order to pass it on to the other party
@@ -135,6 +135,8 @@ export const TradeHashFollower: FC = () => {
       text=''
       title="Generating trade hash(Follower)"
       backRoute={ROUTES.switchRole.root}
+      toRouteName="Publish"
+      toRoute={ROUTES.follower.publish.root}
     >
 
       <form onSubmit={handleSubmit}>

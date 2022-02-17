@@ -12,6 +12,8 @@ type Props = {
   loading?: boolean;
   title: string,
   text: string,
+  toRouteName?: string,
+  toRoute?: string,
   backRoute?: string,
 };
 
@@ -20,6 +22,8 @@ export const Container: FC<PropsWithChildren<Props>> = ({
   title,
   text,
   backRoute,
+  toRouteName,
+  toRoute,
   children,
 }) => (
   <div className={cn(styles.container, className)}>
@@ -27,19 +31,29 @@ export const Container: FC<PropsWithChildren<Props>> = ({
 
       {
         backRoute ? (
-          <Link className={styles.buttonBack} to={backRoute}>
+          <Link className={styles.backRoute} to={backRoute}>
             Back
           </Link>
         ) : null
       }
 
-      <div className={styles.title}>
-        {title}
+      <div>
+        <div className={styles.title}>
+          {title}
+        </div>
+
+        <div className={styles.subtitle}>
+          {text}
+        </div>
       </div>
 
-      <div className={styles.subtitle}>
-        {text}
-      </div>
+      {
+        toRoute ? (
+          <Link className={styles.toRoute} to={toRoute}>
+            {toRouteName}
+          </Link>
+        ) : null
+      }
 
     </div>
 

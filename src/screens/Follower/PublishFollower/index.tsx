@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import {
   Input,
@@ -11,18 +12,15 @@ import { useLoadWeb3 } from '../../../hooks';
 
 import styles from './styles.module.scss';
 
-type Props = {
-  tradeHash: string,
-};
-
-export const PublishCreate: FC<Props> = ({ tradeHash }) => {
+export const PublishFollower: FC = () => {
+  const { tradeHash } = useParams();
   const web3 = useWeb3React();
   const { provider } = useLoadWeb3();
   const { methodsSwap } = useLoadWeb3();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [partnersTradeHash, setPartnersTradeHash] = useState<string>(tradeHash);
+  const [partnersTradeHash, setPartnersTradeHash] = useState<string>(tradeHash || '');
 
   const handleSignTradeHash = async () => {
     setIsLoading(true);
@@ -50,7 +48,7 @@ export const PublishCreate: FC<Props> = ({ tradeHash }) => {
       className={styles.container}
       text=''
       title="Publish"
-      backRoute={ROUTES.creator.generating}
+      backRoute={ROUTES.follower.generating}
     >
 
       <div className={styles.inputWrapper}>

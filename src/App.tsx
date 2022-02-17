@@ -13,6 +13,7 @@ import {
   TradeHashCreate,
   PublishCreate,
   TradeHashFollower,
+  PublishFollower,
 } from './screens';
 import { injected } from './wallet/Connect';
 
@@ -21,7 +22,7 @@ import styles from './styles.module.scss';
 const App = () => {
   const web3 = useWeb3React();
 
-  const [tradeHash, setTradeHash] = useState<string>('a7a40e0dcce032726491540456e33cc8260b28f8f85b30b72bc1f40e34a0547d');
+  const [tradeHash, setTradeHash] = useState<string>('');
 
   async function connect() {
     try {
@@ -48,14 +49,27 @@ const App = () => {
         />
 
         <Route
-          path={ROUTES.creator.publish}
+          path={ROUTES.creator.publish.root}
           element={<PublishCreate tradeHash={tradeHash} />}
-        />
+        >
+          <Route
+            path=":tradeHash"
+          />
+        </Route>
 
         <Route
           path={ROUTES.follower.generating}
           element={<TradeHashFollower />}
         />
+
+        <Route
+          path={ROUTES.follower.publish.root}
+          element={<PublishFollower />}
+        >
+          <Route
+            path=":tradeHash"
+          />
+        </Route>
 
         <Route
           path={ROUTES.switchRole.root}

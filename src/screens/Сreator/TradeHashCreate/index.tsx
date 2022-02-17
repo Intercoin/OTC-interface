@@ -98,7 +98,7 @@ export const TradeHashCreate: FC<Props> = ({ setTradeHash }) => {
 
       setIsLoading(false);
 
-      navigate(ROUTES.creator.publish);
+      navigate(ROUTES.creator.publish.to(values.hash));
     } catch (e) {
       setIsLoading(false);
       console.log(e);
@@ -183,6 +183,8 @@ export const TradeHashCreate: FC<Props> = ({ setTradeHash }) => {
       text=''
       title="Generating trade hash(Creator)"
       backRoute={ROUTES.switchRole.root}
+      toRouteName="Publish"
+      toRoute={ROUTES.creator.publish.root}
     >
 
       <form onSubmit={handleSubmit}>
