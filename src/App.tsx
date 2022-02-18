@@ -52,6 +52,7 @@ const App: FC = () => {
           path={ROUTES.creator.publish}
           element={(
             <Publish
+              nextScreenRoute={ROUTES.creator.claim}
               backRoute={ROUTES.creator.generating}
               toRoute={ROUTES.creator.claim}
               toRouteName="Claim"
@@ -79,6 +80,7 @@ const App: FC = () => {
             path={ROUTES.follower.publish}
             element={(
               <Publish
+                nextScreenRoute={ROUTES.follower.claim}
                 backRoute={ROUTES.follower.generating}
                 toRoute={ROUTES.follower.claim}
                 toRouteName="Claim"

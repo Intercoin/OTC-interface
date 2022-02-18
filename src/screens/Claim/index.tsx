@@ -10,6 +10,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useFormik } from 'formik';
 import { useLoadWeb3 } from 'hooks';
 import { parseQueryString } from 'utils';
+import cn from 'classnames';
 import { initialValues, validationSchema, Values } from './formik-data';
 
 import styles from './styles.module.scss';
@@ -32,6 +33,7 @@ export const Claim: FC<Props> = ({ backRoute }) => {
     initialValues: {
       ...initialValues,
       hash: queryParams?.tradeHash || '',
+      signature: queryParams?.signature || '',
     },
     validationSchema,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -41,6 +43,7 @@ export const Claim: FC<Props> = ({ backRoute }) => {
   const {
     values: {
       hash,
+      signature,
     },
     handleSubmit,
     handleBlur,
@@ -53,11 +56,11 @@ export const Claim: FC<Props> = ({ backRoute }) => {
 
   async function onSubmit() {
     setIsLoading(true);
-    let signature = queryParams?.signature;
+    let mySignature = queryParams?.signature;
 
     try {
-      if (!signature) {
-        signature = await provider.eth.sign(
+      if (!mySignature) {
+        mySignature = await provider.eth.sign(
           `0x${hash}`,
           web3.account,
         );
@@ -65,7 +68,7 @@ export const Claim: FC<Props> = ({ backRoute }) => {
 
       await methodsSwap?.claim(
         `0x${hash}`,
-        signature,
+        [signature, mySignature],
       ).send({ from: web3.account });
 
       setIsLoading(false);
@@ -84,6 +87,17 @@ export const Claim: FC<Props> = ({ backRoute }) => {
     >
 
       <form onSubmit={handleSubmit}>
+        <div className={cn(styles.inputWrapper, styles.mb)}>
+          <Input
+            name="signature"
+            onChange={handleChange}
+            value={signature}
+            placeholder="Signature"
+            error={touched?.signature && errors?.signature}
+            onBlur={handleBlur}
+          />
+        </div>
+
         <div className={styles.inputWrapper}>
           <Input
             name="hash"
