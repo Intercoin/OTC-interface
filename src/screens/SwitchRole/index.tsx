@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+} from 'react-router-dom';
 
 import {
   Container,
@@ -10,19 +12,21 @@ import styles from './styles.module.scss';
 
 export const SwitchRole: FC = () => (
   <Container
-      text=''
-      title="Switch role"
-    >
-
+    text=''
+    title="Switch role"
+  >
     <div className={styles.container}>
       <Link to={ROUTES.creator.generating}>
         Creator
+      </Link>
+
+      <Link to={ROUTES.withdraw.root}>
+        Withdraw
       </Link>
 
       <Link to={ROUTES.follower.generating}>
         Follower
       </Link>
     </div>
-
   </Container>
 );

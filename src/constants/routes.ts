@@ -11,6 +11,10 @@ type Routes = {
       root: string,
       to: (tradeHash: string) => string
     },
+    claim: {
+      root: string,
+      to: (tradeHash: string) => string
+    },
   },
   follower: {
     root: string,
@@ -19,7 +23,15 @@ type Routes = {
       root: string,
       to: (tradeHash: string) => string
     },
+    claim: {
+      root: string,
+      to: (tradeHash: string) => string
+    },
   }
+  withdraw: {
+    root: string,
+    to: (tradeHash: string) => string
+  },
 };
 
 export const ROUTES: Routes = {
@@ -33,6 +45,10 @@ export const ROUTES: Routes = {
       root: `${ROOT_PREFIX}/creator/publish`,
       to: (tradeHash: string) => `${ROOT_PREFIX}/creator/publish/${tradeHash}`,
     },
+    claim: {
+      root: `${ROOT_PREFIX}/creator/claim`,
+      to: (tradeHash: string) => `${ROOT_PREFIX}/creator/claim/${tradeHash}`,
+    },
   },
   follower: {
     root: `${ROOT_PREFIX}/follower`,
@@ -41,5 +57,13 @@ export const ROUTES: Routes = {
       root: `${ROOT_PREFIX}/follower/publish`,
       to: (tradeHash: string) => `${ROOT_PREFIX}/follower/publish/${tradeHash}`,
     },
+    claim: {
+      root: `${ROOT_PREFIX}/follower/claim`,
+      to: (tradeHash: string) => `${ROOT_PREFIX}/follower/claim/${tradeHash}`,
+    },
+  },
+  withdraw: {
+    root: `${ROOT_PREFIX}/withdraw`,
+    to: (tradeHash: string) => `${ROOT_PREFIX}/withdraw/${tradeHash}`,
   },
 };

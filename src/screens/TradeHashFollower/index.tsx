@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -11,8 +11,8 @@ import {
   Container,
   InputAmount,
 } from 'components';
-import { useLoadWeb3, useTradeHash } from 'hooks';
-import { copyText, defineNetwork } from 'utils';
+import { useLoadWeb3 } from 'hooks';
+import { copyText } from 'utils';
 import cn from 'classnames';
 import { ReactComponent as Check } from 'assets/images/lending/check.svg';
 import { validationSchema, initialValues, Values } from './formik-data';
@@ -22,16 +22,11 @@ import {
   TOKEN_LIST_DEFAULT,
   TOKEN_LIST_RINKEBY,
   TOKEN_LIST_BSC,
-  networkList,
   REGEX,
   ROUTES,
-} from '../../../constants';
+} from '../../constants';
 
 import styles from './styles.module.scss';
-
-type Props = {
-  setTradeHash: (tradeHash: string) => void,
-};
 
 const TOKENS_LIST = {
   4: TOKEN_LIST_RINKEBY,
@@ -43,7 +38,7 @@ const SWAP_CONTRACTS_LIST = {
   97: SWAP_BSC_TESTNET_ADDRESS,
 };
 
-export const TradeHashCreate: FC<Props> = ({ setTradeHash }) => {
+export const TradeHashFollower: FC = () => {
   const web3 = useWeb3React();
   const navigate = useNavigate();
 
@@ -62,6 +57,24 @@ export const TradeHashCreate: FC<Props> = ({ setTradeHash }) => {
     methodsSwap,
   } = useLoadWeb3(formik.values.senderToken.value);
 
+  const {
+    values: {
+      recipientAddress,
+      senderToken,
+      senderAmount,
+      senderPenalty,
+      hash,
+    },
+    handleSubmit,
+    setFieldValue,
+    handleBlur,
+    handleChange,
+    isValid,
+    touched,
+    errors,
+    dirty,
+  } = formik;
+
   async function onSubmit(values, { setSubmitting }) {
     setIsLoading(true);
 
@@ -78,7 +91,7 @@ export const TradeHashCreate: FC<Props> = ({ setTradeHash }) => {
        * If there is not enough money to make a transaction, the statement is not called
        */
 
-      if (!Web3.utils.toBN(allowance).lt(Web3.utils.toWei(values.senderAmount, 'ether'))) {
+      if (!Web3.utils.toBN(allowance).lte(Web3.utils.toWei(values.senderAmount, 'ether'))) {
         /**
          * is called to resolve the transaction
          */
@@ -98,7 +111,7 @@ export const TradeHashCreate: FC<Props> = ({ setTradeHash }) => {
 
       setIsLoading(false);
 
-      navigate(ROUTES.creator.publish.to(values.hash));
+      navigate(ROUTES.follower.publish.to(hash));
     } catch (e) {
       setIsLoading(false);
       console.log(e);
@@ -106,55 +119,6 @@ export const TradeHashCreate: FC<Props> = ({ setTradeHash }) => {
 
     setSubmitting(false);
   }
-
-  const {
-    values: {
-      recipientNetwork,
-      recipientToken,
-      recipientAddress,
-      recipientAmount,
-      recipientPenalty,
-      senderToken,
-      senderAmount,
-      senderPenalty,
-      hash,
-    },
-    handleSubmit,
-    setFieldValue,
-    handleBlur,
-    handleChange,
-    isValid,
-    touched,
-    errors,
-    dirty,
-  } = formik;
-
-  const handleGeneratingTradeHash = async () => {
-    const { networkName } = defineNetwork(web3.chainId);
-
-    const { tradeHash } = useTradeHash({
-      senderChainId: web3.chainId,
-      recipientChainId: recipientNetwork.value.chainId,
-
-      senderNetwork: networkName,
-      recipientNetwork: recipientNetwork.value.name,
-
-      senderAddress: web3.account || '',
-      recipientAddress,
-
-      senderAmount,
-      recipientAmount,
-
-      senderToken: senderToken.value,
-      recipientToken: recipientToken.value,
-
-      senderPenalty,
-      recipientPenalty,
-    });
-
-    await setTradeHash(tradeHash);
-    await setFieldValue('hash', tradeHash);
-  };
 
   /** handleCopyTradeHash function
    in order to pass it on to the other party
@@ -165,26 +129,14 @@ export const TradeHashCreate: FC<Props> = ({ setTradeHash }) => {
     setTimeout(() => setCopyImgStyles(false), 1000);
   };
 
-  const disabledGeneratingTradeHash = useMemo(() => (
-    !dirty ||
-    !!errors?.recipientAddress ||
-    !!errors?.recipientNetwork?.value ||
-      !!errors?.recipientToken?.value ||
-      !!errors?.recipientAmount ||
-      !!errors?.recipientPenalty ||
-      !!errors?.senderToken?.value ||
-      !!errors?.senderAmount ||
-      !!errors?.senderPenalty
-  ), [errors, dirty]);
-
   return (
     <Container
       className={styles.container}
       text=''
-      title="Generating trade hash(Creator)"
+      title="Generating trade hash(Follower)"
       backRoute={ROUTES.switchRole.root}
       toRouteName="Publish"
-      toRoute={ROUTES.creator.publish.root}
+      toRoute={ROUTES.follower.publish.root}
     >
 
       <form onSubmit={handleSubmit}>
@@ -225,36 +177,6 @@ export const TradeHashCreate: FC<Props> = ({ setTradeHash }) => {
           />
         </div>
 
-        <h4 className={styles.title}>
-          Recipient network
-        </h4>
-        <Dropdown
-          value={recipientNetwork}
-          name='recipientNetwork'
-          options={networkList}
-          className={styles.dropdown}
-          onChange={(e) => {
-            setFieldValue('recipientNetwork', e);
-          }}
-          onBlur={handleBlur}
-          error={!!touched?.recipientNetwork?.value && !!errors?.recipientNetwork?.value}
-        />
-
-        <h4 className={styles.title}>
-          Recipient token
-        </h4>
-        <Dropdown
-          name="recipientToken"
-          value={recipientToken}
-          options={recipientNetwork.value.chainId ? TOKENS_LIST[recipientNetwork.value.chainId] : TOKEN_LIST_DEFAULT}
-          className={styles.dropdown}
-          onChange={(e) => {
-            setFieldValue('recipientToken', e);
-          }}
-          onBlur={handleBlur}
-          error={!!touched?.recipientToken?.value && !!errors?.recipientToken?.value}
-        />
-
         <div className={styles.inputWrapper}>
           <Input
             name="recipientAddress"
@@ -269,39 +191,8 @@ export const TradeHashCreate: FC<Props> = ({ setTradeHash }) => {
         </div>
 
         <div className={styles.inputWrapper}>
-          <InputAmount
-            name="recipientAmount"
-            onChange={handleChange}
-            value={recipientAmount}
-            placeholder="Recipient amount"
-            onBlur={handleBlur}
-            error={touched?.recipientAmount && errors?.recipientAmount}
-          />
-        </div>
-
-        <div className={styles.inputWrapper}>
-          <InputAmount
-            name="recipientPenalty"
-            onChange={handleChange}
-            value={recipientPenalty}
-            placeholder="Recipient penalty"
-            onBlur={handleBlur}
-            error={touched?.recipientPenalty && errors?.recipientPenalty}
-          />
-        </div>
-
-        <Button
-          className={styles.mb}
-          onClick={() => handleGeneratingTradeHash()}
-          disabled={disabledGeneratingTradeHash}
-        >
-          Generating
-        </Button>
-
-        <div className={styles.inputWrapper}>
           <Input
             name="hash"
-            disabled
             value={hash}
             placeholder="Trade hash"
             onChange={handleChange}
