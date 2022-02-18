@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import {
   Input,
@@ -9,6 +9,7 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import { useFormik } from 'formik';
 import { useLoadWeb3 } from 'hooks';
+import { parseQueryString } from 'utils';
 import { initialValues, validationSchema, Values } from './formik-data';
 
 import styles from './styles.module.scss';
@@ -18,17 +19,19 @@ type Props = {
 };
 
 export const Claim: FC<Props> = ({ backRoute }) => {
-  const { tradeHash } = useParams();
   const web3 = useWeb3React();
   const { provider } = useLoadWeb3();
   const { methodsSwap } = useLoadWeb3();
+  const { search } = useLocation();
+
+  const queryParams = parseQueryString(search);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const formik = useFormik<Values>({
     initialValues: {
       ...initialValues,
-      hash: tradeHash || '',
+      hash: queryParams?.tradeHash || '',
     },
     validationSchema,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -50,14 +53,17 @@ export const Claim: FC<Props> = ({ backRoute }) => {
 
   async function onSubmit() {
     setIsLoading(true);
+    let signature = queryParams?.signature;
 
     try {
-      const signature = await provider.eth.sign(
-        `0x${hash}`,
-        web3.account,
-      );
+      if (!signature) {
+        signature = await provider.eth.sign(
+          `0x${hash}`,
+          web3.account,
+        );
+      }
 
-      await methodsSwap?.publish(
+      await methodsSwap?.claim(
         `0x${hash}`,
         signature,
       ).send({ from: web3.account });

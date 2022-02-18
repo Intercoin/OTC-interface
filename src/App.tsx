@@ -49,11 +49,11 @@ const App: FC = () => {
         </Route>
 
         <Route
-          path={ROUTES.creator.publish.root}
+          path={ROUTES.creator.publish}
           element={(
             <Publish
               backRoute={ROUTES.creator.generating}
-              toRoute={ROUTES.creator.claim.root}
+              toRoute={ROUTES.creator.claim}
               toRouteName="Claim"
             />
           )
@@ -65,8 +65,8 @@ const App: FC = () => {
         </Route>
 
         <Route
-          path={ROUTES.creator.claim.root}
-          element={<Claim backRoute={ROUTES.creator.publish.root} />}
+          path={ROUTES.creator.claim}
+          element={<Claim backRoute={ROUTES.creator.publish} />}
         >
           <Route
             path=":tradeHash"
@@ -76,11 +76,11 @@ const App: FC = () => {
         {/* <Follower /> */}
         <Route path={ROUTES.follower.root}>
           <Route
-            path={ROUTES.follower.publish.root}
+            path={ROUTES.follower.publish}
             element={(
               <Publish
                 backRoute={ROUTES.follower.generating}
-                toRoute={ROUTES.follower.claim.root}
+                toRoute={ROUTES.follower.claim}
                 toRouteName="Claim"
               />
             )
@@ -101,8 +101,8 @@ const App: FC = () => {
           </Route>
 
           <Route
-            path={ROUTES.follower.claim.root}
-            element={<Claim backRoute={ROUTES.follower.publish.root} />}
+            path={ROUTES.follower.claim}
+            element={<Claim backRoute={ROUTES.follower.publish} />}
           >
             <Route
               path=":tradeHash"
@@ -113,8 +113,8 @@ const App: FC = () => {
 
         {/* <Withdraw /> */}
         <Route
-          path={ROUTES.withdraw.root}
-          element={<Withdraw backRoute={ROUTES.switchRole.root} />}
+          path={ROUTES.withdraw}
+          element={<Withdraw backRoute={ROUTES.switchRole} />}
         >
           <Route
             path=":tradeHash"
@@ -122,12 +122,12 @@ const App: FC = () => {
         </Route>
 
         {/* <SwitchRole /> */}
-        <Route path={ROUTES.switchRole.root} element={<SwitchRole />} />
+        <Route path={ROUTES.switchRole} element={<SwitchRole />} />
 
         {/* Redirect */}
         <Route
           path="*"
-          element={<Navigate to={ROUTES.switchRole.root} />}
+          element={<Navigate to={ROUTES.switchRole} />}
         />
       </Routes>
 

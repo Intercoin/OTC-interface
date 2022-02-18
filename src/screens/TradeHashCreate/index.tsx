@@ -12,7 +12,7 @@ import {
   InputAmount,
 } from 'components';
 import { useLoadWeb3, useTradeHash } from 'hooks';
-import { copyText, defineNetwork } from 'utils';
+import { copyText, defineNetwork, queryString } from 'utils';
 import cn from 'classnames';
 import { ReactComponent as Check } from 'assets/images/lending/check.svg';
 import { validationSchema, initialValues, Values } from './formik-data';
@@ -94,7 +94,7 @@ export const TradeHashCreate: FC = () => {
 
       setIsLoading(false);
 
-      navigate(ROUTES.creator.publish.to(values.hash));
+      navigate(`${ROUTES.creator.publish}/${queryString({ hashTrade: values.hash })}`);
     } catch (e) {
       setIsLoading(false);
       console.log(e);
@@ -178,9 +178,9 @@ export const TradeHashCreate: FC = () => {
       className={styles.container}
       text=''
       title="Generating trade hash(Creator)"
-      backRoute={ROUTES.switchRole.root}
+      backRoute={ROUTES.switchRole}
       toRouteName="Publish"
-      toRoute={ROUTES.creator.publish.root}
+      toRoute={ROUTES.creator.publish}
     >
 
       <form onSubmit={handleSubmit}>
