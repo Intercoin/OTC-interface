@@ -8,16 +8,16 @@ export type Values = {
   senderToken: ValueDropdown,
   senderPenalty: string,
 
-  recipientAddress: string,
+  otherParticipantAddress: string,
 };
 // 0x528e7c77B8F3001B512e8BF305b03CeA420951cd
 export const initialValues = {
   senderAmount: '',
   hash: '',
   senderPenalty: '',
-  senderToken: { value: '', label: 'Connect the network' },
+  senderToken: { value: '', label: 'Select the asset' },
 
-  recipientAddress: '',
+  otherParticipantAddress: '',
 };
 
 export const validationSchema = object().shape({
@@ -29,5 +29,5 @@ export const validationSchema = object().shape({
     value: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
   }),
 
-  recipientAddress: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
+  otherParticipantAddress: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
 });

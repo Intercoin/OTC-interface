@@ -8,24 +8,24 @@ export type Values = {
   senderToken: ValueDropdown,
   senderPenalty: string,
 
-  recipientAddress: string,
-  recipientAmount: string,
-  recipientPenalty: string,
-  recipientNetwork: ValueDropdown,
-  recipientToken: ValueDropdown,
+  otherParticipantAddress: string,
+  otherParticipantAmount: string,
+  otherParticipantPenalty: string,
+  otherParticipantNetwork: ValueDropdown,
+  otherParticipantToken: ValueDropdown,
 };
-// 0x528e7c77B8F3001B512e8BF305b03CeA420951cd
+
 export const initialValues = {
   senderAmount: '',
   hash: '',
   senderPenalty: '',
-  senderToken: { value: '', label: 'Connect the network' },
+  senderToken: { value: '', label: 'Select the asset' },
 
-  recipientAddress: '',
-  recipientAmount: '',
-  recipientPenalty: '',
-  recipientNetwork: { value: { chainId: 4, name: 'Rinkeby' }, label: 'Rinkeby' },
-  recipientToken: { value: '', label: 'Connect the network' },
+  otherParticipantAddress: '',
+  otherParticipantAmount: '',
+  otherParticipantPenalty: '',
+  otherParticipantNetwork: { value: { chainId: 4, name: 'Rinkeby' }, label: 'Rinkeby' },
+  otherParticipantToken: { value: '', label: 'Select the asset' },
 };
 
 export const validationSchema = object().shape({
@@ -37,15 +37,15 @@ export const validationSchema = object().shape({
     value: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
   }),
 
-  recipientAddress: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
-  recipientAmount: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
-  recipientPenalty: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
+  otherParticipantAddress: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
+  otherParticipantAmount: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
+  otherParticipantPenalty: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
 
-  recipientNetwork: object().shape({
+  otherParticipantNetwork: object().shape({
     value: object().required({ chainId: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED) }),
   }),
 
-  recipientToken: object().shape({
+  otherParticipantToken: object().shape({
     value: string().required(VALIDATION_ERROR_MESSAGES.REQUIRED),
   }),
 });

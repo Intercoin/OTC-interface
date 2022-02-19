@@ -4,7 +4,7 @@ import { Navigate, Route, Routes } from 'react-router';
 
 import {
   Claim,
-  Publish,
+  Engage,
   TradeHashFollower,
 } from 'containers';
 import { NavTab } from 'components';
@@ -15,17 +15,17 @@ export const Follower: FC = () => {
     [
       {
         name: 'Generating',
-        to: ROUTES.creator.generating,
+        to: ROUTES.follower.generating,
         status: true,
       },
       {
-        name: 'Publish',
-        to: ROUTES.creator.publish,
+        name: 'Engage',
+        to: ROUTES.follower.engage,
         status: true,
       },
       {
         name: 'Claim',
-        to: ROUTES.creator.claim,
+        to: ROUTES.follower.claim,
         status: false,
       },
     ]
@@ -41,8 +41,8 @@ export const Follower: FC = () => {
 
       <Routes>
         <Route
-          path="publish/*"
-          element={(<Publish nextScreenRoute={ROUTES.follower.claim} />)}
+          path="engage/*"
+          element={(<Engage nextScreenRoute={ROUTES.follower.claim} />)}
         >
           <Route
             path=":tradeHash"

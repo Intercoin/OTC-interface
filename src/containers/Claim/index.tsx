@@ -23,8 +23,6 @@ export const Claim: FC = () => {
 
   const queryParams = parseQueryString(pathname);
 
-  console.log(queryParams);
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const formik = useFormik<Values>({

@@ -2,22 +2,22 @@ import keccak256 from 'keccak256';
 
 type Props = {
   senderChainId: number | undefined,
-  recipientChainId: number | undefined,
+  otherParticipantChainId: number | undefined,
 
   senderNetwork: string,
-  recipientNetwork: string,
+  otherParticipantNetwork: string,
 
   senderAddress: string,
-  recipientAddress: string,
+  otherParticipantAddress: string,
 
   senderAmount,
-  recipientAmount,
+  otherParticipantAmount,
 
   senderToken: string,
-  recipientToken: string,
+  otherParticipantToken: string,
 
   senderPenalty: string,
-  recipientPenalty: string,
+  otherParticipantPenalty: string,
 };
 
 /**
@@ -26,31 +26,31 @@ type Props = {
 
 export const useTradeHash = ({
   senderChainId,
-  recipientChainId,
+  otherParticipantChainId,
 
   senderNetwork,
-  recipientNetwork,
+  otherParticipantNetwork,
 
   senderAddress,
-  recipientAddress,
+  otherParticipantAddress,
 
   senderAmount,
-  recipientAmount,
+  otherParticipantAmount,
 
   senderToken,
-  recipientToken,
+  otherParticipantToken,
 
   senderPenalty,
-  recipientPenalty,
+  otherParticipantPenalty,
 }: Props) => {
   const timestamp = Date.now();
 
-  const tradeString = `${senderNetwork}${recipientNetwork}
-  ${senderChainId}${recipientChainId}
-  ${senderAddress}${recipientAddress}
-  ${senderToken}${recipientToken}
-  ${senderAmount}${recipientAmount}
-  ${senderPenalty}${recipientPenalty}
+  const tradeString = `${senderNetwork}${otherParticipantNetwork}
+  ${senderChainId}${otherParticipantChainId}
+  ${senderAddress}${otherParticipantAddress}
+  ${senderToken}${otherParticipantToken}
+  ${senderAmount}${otherParticipantAmount}
+  ${senderPenalty}${otherParticipantPenalty}
   ${timestamp}`;
 
   const tradeHash = keccak256(tradeString).toString('hex');

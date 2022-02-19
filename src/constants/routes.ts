@@ -5,13 +5,13 @@ type Routes = {
   creator: {
     root: string,
     generating: string,
-    publish: string,
+    engage: string,
     claim: string,
   },
   follower: {
     root: string,
     generating: string,
-    publish: string,
+    engage: string,
     claim: string,
   },
   withdraw: string,
@@ -22,13 +22,13 @@ export const ROUTES: Routes = {
   creator: {
     root: `${ROOT_PREFIX}/creator`,
     generating: `${ROOT_PREFIX}/creator/generating`,
-    publish: `${ROOT_PREFIX}/creator/publish`,
+    engage: `${ROOT_PREFIX}/creator/engage`,
     claim: `${ROOT_PREFIX}/creator/claim`,
   },
   follower: {
     root: `${ROOT_PREFIX}/follower`,
     generating: `${ROOT_PREFIX}/follower/generating`,
-    publish: `${ROOT_PREFIX}/follower/publish`,
+    engage: `${ROOT_PREFIX}/follower/engage`,
     claim: `${ROOT_PREFIX}/follower/claim`,
   },
   withdraw: `${ROOT_PREFIX}/withdraw`,

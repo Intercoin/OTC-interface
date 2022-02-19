@@ -18,7 +18,7 @@ type Props = {
   nextScreenRoute?: string,
 };
 
-export const Publish: FC<Props> = ({
+export const Engage: FC<Props> = ({
   nextScreenRoute,
 }) => {
   const web3 = useWeb3React();
@@ -67,7 +67,7 @@ export const Publish: FC<Props> = ({
         );
       }
 
-      await methodsSwap?.publish(
+      await methodsSwap?.engage(
         `0x${hash}`,
         signature,
       ).send({ from: web3.account });
@@ -84,7 +84,7 @@ export const Publish: FC<Props> = ({
     <Container
       className={styles.container}
       text=''
-      title="Publish"
+      title="Engage"
     >
 
       <form onSubmit={handleSubmit}>
@@ -104,7 +104,7 @@ export const Publish: FC<Props> = ({
             disabled={!dirty || !isValid}
             className={styles.button}
           >
-            Publish
+            Engage
           </Button>
         </div>
       </form>

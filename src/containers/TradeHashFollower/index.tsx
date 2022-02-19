@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -59,7 +59,7 @@ export const TradeHashFollower: FC = () => {
 
   const {
     values: {
-      recipientAddress,
+      otherParticipantAddress,
       senderToken,
       senderAmount,
       senderPenalty,
@@ -69,11 +69,16 @@ export const TradeHashFollower: FC = () => {
     setFieldValue,
     handleBlur,
     handleChange,
+    resetForm,
     isValid,
     touched,
     errors,
     dirty,
   } = formik;
+
+  useEffect(() => {
+    resetForm();
+  }, [web3.chainId]);
 
   async function onSubmit(values, { setSubmitting }) {
     setIsLoading(true);
@@ -105,13 +110,13 @@ export const TradeHashFollower: FC = () => {
         `0x${values.hash}`,
         Web3.utils.toWei(values.senderAmount, 'ether'),
         values.senderToken.value,
-        values.recipientAddress,
+        values.otherParticipantAddress,
         Web3.utils.toWei(values.senderPenalty, 'ether'),
       )?.send({ from: web3.account });
 
       setIsLoading(false);
 
-      navigate(`${ROUTES.follower.publish}/&${queryString({ hashTrade: values.hash })}`);
+      navigate(`${ROUTES.follower.engage}/&${queryString({ hashTrade: values.hash })}`);
     } catch (e) {
       setIsLoading(false);
       console.log(e);
@@ -176,14 +181,14 @@ export const TradeHashFollower: FC = () => {
 
         <div className={styles.inputWrapper}>
           <Input
-            name="recipientAddress"
+            name="otherParticipantAddress"
             onChange={(e) => {
-              setFieldValue('recipientAddress', e.target.value.replace(REGEX.onlyLettersAndNumbers, ''));
+              setFieldValue('otherParticipantAddress', e.target.value.replace(REGEX.onlyLettersAndNumbers, ''));
             }}
-            value={recipientAddress}
-            placeholder="Recipient address"
+            value={otherParticipantAddress}
+            placeholder="Other participant address"
             onBlur={handleBlur}
-            error={touched?.recipientAddress && errors?.recipientAddress}
+            error={touched?.otherParticipantAddress && errors?.otherParticipantAddress}
           />
         </div>
 

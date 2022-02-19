@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import cn from 'classnames';
 
 import styles from './styles.module.scss';
@@ -15,15 +15,19 @@ type Props = {
   tabs: Value[]
 };
 
-export const NavTab: FC<Props> = ({ tabs, className }) => (
-  <div className={cn(styles.container, className)}>
-    {
-      tabs.map(({ name, to, status }) => (
-        <Link to={to} className={styles.tab}>
-          <div className={cn(styles.status, { [styles.active]: status })} />
-          {name}
-        </Link>
-      ))
-    }
-  </div>
-);
+export const NavTab: FC<Props> = ({ tabs, className }) => {
+  const { pathname } = useLocation();
+
+  return (
+    <div className={cn(styles.container, className)}>
+      {
+        tabs.map(({ name, to }) => (
+          <Link to={to} className={cn(styles.tab, { [styles.active]: pathname.includes(name.toLowerCase()) })}>
+            {/* <div className={cn(styles.status, { [styles.done]: status })} /> */}
+            {name}
+          </Link>
+        ))
+      }
+    </div>
+  );
+};

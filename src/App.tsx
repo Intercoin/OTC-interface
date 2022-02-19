@@ -34,29 +34,31 @@ const App: FC = () => {
         active={web3.active}
       />
 
-      <Routes>
-        <Route
-          path="creator/*"
-          element={<Creator />}
-        />
+      <div className={styles.pages}>
+        <Routes>
+          <Route
+            path="creator/*"
+            element={<Creator />}
+          />
 
-        <Route
-          path="follower/*"
-          element={<Follower />}
-        />
+          <Route
+            path="follower/*"
+            element={<Follower />}
+          />
 
-        <Route
-          path="withdraw/*"
-          element={<WithdrawScreen />}
-        />
+          <Route
+            path="withdraw/*"
+            element={<WithdrawScreen />}
+          />
 
-        <Route path={ROUTES.switchRole} element={<Main />} />
+          <Route path={ROUTES.switchRole} element={<Main />} />
 
-        <Route
-          path="*"
-          element={<Navigate to={ROUTES.switchRole} />}
-         />
-      </Routes>
+          <Route
+            path="*"
+            element={<Navigate to={ROUTES.switchRole} />}
+          />
+        </Routes>
+      </div>
 
     </div>
   );

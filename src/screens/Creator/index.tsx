@@ -1,10 +1,10 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { Navigate, Route, Routes } from 'react-router';
 
 import {
   Claim,
-  Publish,
+  Engage,
   TradeHashCreate,
 } from 'containers';
 import { NavTab } from 'components';
@@ -19,8 +19,8 @@ export const Creator: FC = () => {
         status: true,
       },
       {
-        name: 'Publish',
-        to: ROUTES.creator.publish,
+        name: 'Engage',
+        to: ROUTES.creator.engage,
         status: true,
       },
       {
@@ -30,10 +30,6 @@ export const Creator: FC = () => {
       },
     ]
   ), []);
-
-  useEffect(() => {
-    console.log();
-  }, []);
 
   return (
     <>
@@ -45,8 +41,8 @@ export const Creator: FC = () => {
         />
 
         <Route
-          path="publish"
-          element={(<Publish nextScreenRoute={ROUTES.creator.claim} />)}
+          path="engage"
+          element={(<Engage nextScreenRoute={ROUTES.creator.claim} />)}
         >
           <Route
             path=":tradeHash"

@@ -1,4 +1,9 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, {
+  FC,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -88,13 +93,13 @@ export const TradeHashCreate: FC = () => {
         `0x${values.hash}`,
         Web3.utils.toWei(values.senderAmount, 'ether'),
         values.senderToken.value,
-        values.recipientAddress,
+        values.otherParticipantAddress,
         Web3.utils.toWei(values.senderPenalty, 'ether'),
       )?.send({ from: web3.account });
 
       setIsLoading(false);
 
-      navigate(`${ROUTES.creator.publish}/&${queryString({ hashTrade: values.hash })}`);
+      navigate(`${ROUTES.creator.engage}/&${queryString({ hashTrade: values.hash })}`);
     } catch (e) {
       setIsLoading(false);
       console.log(e);
@@ -105,11 +110,11 @@ export const TradeHashCreate: FC = () => {
 
   const {
     values: {
-      recipientNetwork,
-      recipientToken,
-      recipientAddress,
-      recipientAmount,
-      recipientPenalty,
+      otherParticipantNetwork,
+      otherParticipantToken,
+      otherParticipantAddress,
+      otherParticipantAmount,
+      otherParticipantPenalty,
       senderToken,
       senderAmount,
       senderPenalty,
@@ -119,33 +124,38 @@ export const TradeHashCreate: FC = () => {
     setFieldValue,
     handleBlur,
     handleChange,
+    resetForm,
     isValid,
     touched,
     errors,
     dirty,
   } = formik;
 
+  useEffect(() => {
+    resetForm();
+  }, [web3.chainId]);
+
   const handleGeneratingTradeHash = async () => {
     const { networkName } = defineNetwork(web3.chainId);
 
     const { tradeHash } = useTradeHash({
       senderChainId: web3.chainId,
-      recipientChainId: recipientNetwork.value.chainId,
+      otherParticipantChainId: otherParticipantNetwork?.value?.chainId,
 
       senderNetwork: networkName,
-      recipientNetwork: recipientNetwork.value.name,
+      otherParticipantNetwork: otherParticipantNetwork?.value?.name,
 
       senderAddress: web3.account || '',
-      recipientAddress,
+      otherParticipantAddress,
 
       senderAmount,
-      recipientAmount,
+      otherParticipantAmount,
 
       senderToken: senderToken.value,
-      recipientToken: recipientToken.value,
+      otherParticipantToken: otherParticipantToken.value,
 
       senderPenalty,
-      recipientPenalty,
+      otherParticipantPenalty,
     });
 
     await setFieldValue('hash', tradeHash);
@@ -162,11 +172,11 @@ export const TradeHashCreate: FC = () => {
 
   const disabledGeneratingTradeHash = useMemo(() => (
     !dirty ||
-    !!errors?.recipientAddress ||
-    !!errors?.recipientNetwork?.value ||
-      !!errors?.recipientToken?.value ||
-      !!errors?.recipientAmount ||
-      !!errors?.recipientPenalty ||
+    !!errors?.otherParticipantAddress ||
+    !!errors?.otherParticipantNetwork?.value ||
+      !!errors?.otherParticipantToken?.value ||
+      !!errors?.otherParticipantAmount ||
+      !!errors?.otherParticipantPenalty ||
       !!errors?.senderToken?.value ||
       !!errors?.senderAmount ||
       !!errors?.senderPenalty
@@ -218,67 +228,69 @@ export const TradeHashCreate: FC = () => {
         </div>
 
         <h4 className={styles.title}>
-          Recipient network
+          Other participant network
         </h4>
         <Dropdown
-          value={recipientNetwork}
-          name='recipientNetwork'
+          value={otherParticipantNetwork}
+          name='otherParticipantNetwork'
           options={networkList}
           className={styles.dropdown}
           onChange={(e) => {
-            setFieldValue('recipientNetwork', e);
+            setFieldValue('otherParticipantNetwork', e);
+            setFieldValue('otherParticipantToken', { value: '', label: 'Select the asset' });
           }}
           onBlur={handleBlur}
-          error={!!touched?.recipientNetwork?.value && !!errors?.recipientNetwork?.value}
+          error={!!touched?.otherParticipantNetwork?.value && !!errors?.otherParticipantNetwork?.value}
         />
 
         <h4 className={styles.title}>
-          Recipient token
+          Other participant token
         </h4>
         <Dropdown
-          name="recipientToken"
-          value={recipientToken}
-          options={recipientNetwork.value.chainId ? TOKENS_LIST[recipientNetwork.value.chainId] : TOKEN_LIST_DEFAULT}
+          name="otherParticipantToken"
+          value={otherParticipantToken}
+          options={otherParticipantNetwork?.value?.chainId ?
+            TOKENS_LIST[otherParticipantNetwork?.value?.chainId] : TOKEN_LIST_DEFAULT}
           className={styles.dropdown}
           onChange={(e) => {
-            setFieldValue('recipientToken', e);
+            setFieldValue('otherParticipantToken', e);
           }}
           onBlur={handleBlur}
-          error={!!touched?.recipientToken?.value && !!errors?.recipientToken?.value}
+          error={!!touched?.otherParticipantToken?.value && !!errors?.otherParticipantToken?.value}
         />
 
         <div className={styles.inputWrapper}>
           <Input
-            name="recipientAddress"
+            name="otherParticipantAddress"
             onChange={(e) => {
-              setFieldValue('recipientAddress', e.target.value.replace(REGEX.onlyLettersAndNumbers, ''));
+              setFieldValue('otherParticipantAddress', e.target.value.replace(REGEX.onlyLettersAndNumbers, ''));
             }}
-            value={recipientAddress}
-            placeholder="Recipient address"
+            value={otherParticipantAddress}
+            placeholder="Other participant address"
             onBlur={handleBlur}
-            error={touched?.recipientAddress && errors?.recipientAddress}
+            error={touched?.otherParticipantAddress && errors?.otherParticipantAddress}
           />
         </div>
 
         <div className={styles.inputWrapper}>
           <InputAmount
-            name="recipientAmount"
+            name="otherParticipantAmount"
             onChange={handleChange}
-            value={recipientAmount}
-            placeholder="Recipient amount"
+            value={otherParticipantAmount}
+            placeholder="Other participant amount"
             onBlur={handleBlur}
-            error={touched?.recipientAmount && errors?.recipientAmount}
+            error={touched?.otherParticipantAmount && errors?.otherParticipantAmount}
           />
         </div>
 
         <div className={styles.inputWrapper}>
           <InputAmount
-            name="recipientPenalty"
+            name="otherParticipantPenalty"
             onChange={handleChange}
-            value={recipientPenalty}
-            placeholder="Recipient penalty"
+            value={otherParticipantPenalty}
+            placeholder="Other participant penalty"
             onBlur={handleBlur}
-            error={touched?.recipientPenalty && errors?.recipientPenalty}
+            error={touched?.otherParticipantPenalty && errors?.otherParticipantPenalty}
           />
         </div>
 

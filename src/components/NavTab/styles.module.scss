@@ -1,35 +1,48 @@
 @import '../../assets/styles/mixins';
 @import '../../assets/styles/variables';
 
+$border-radius: $border-radius-md $border-radius-md 0 0;
+
 .container {
   display: flex;
   max-width: 540px;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   width: 100%;
-  border-radius: $border-radius-md $border-radius-md 0 0;
-  border: 1px solid $color-grey;
+  border-radius: $border-radius;
   overflow: hidden;
+  height: 60px;
+}
 
+.container > :last-child {
+  border-top-right-radius: $border-radius-md;
+}
+
+.container > :first-child {
+  border-top-left-radius: $border-radius-md;
 }
 
 .tab {
+  text-decoration: none;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   background: white;
-  height: 50px;
+  height: 80%;
   width: 100%;
-  border-right: 1px solid $color-grey;
+  border: 1px solid $color-grey;
+  transition: height 0.4s, border-radius 0.4s;
 
   &:hover {
-    background: #d8f1f3;
+    background: #f3f7f8;
+    color: #1fc7d4;
   }
 }
 
-.tab:last-child {
-  border-right: none;
+.active {
+  height: 100%;
+  border-radius: $border-radius;
 }
 
 .status {
@@ -41,7 +54,7 @@
   margin-bottom: 5px;
 }
 
-.active {
+.done {
   background: $color-green;
 }
 

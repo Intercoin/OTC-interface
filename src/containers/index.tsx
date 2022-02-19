@@ -1,6 +1,6 @@
 export { TradeHashCreate } from './TradeHashCreate';
 export { TradeHashFollower } from './TradeHashFollower';
-export { Publish } from './Publish';
+export { Engage } from './Engage';
 export { Claim } from './Claim';
 export { Withdraw } from './Withdraw';
 
