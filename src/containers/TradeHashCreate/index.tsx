@@ -103,7 +103,7 @@ export const TradeHashCreate: FC = () => {
 
       setIsLoading(false);
 
-      navigate(`${ROUTES.creator.engage}/&${queryString({ hashTrade: values.hash })}`);
+      navigate(`${ROUTES.creator.engage}/&${queryString({ tradeHash: values.hash })}`);
     } catch (e) {
       setIsLoading(false);
       toast.error('Lock failed');

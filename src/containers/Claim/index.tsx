@@ -95,6 +95,9 @@ export const Claim: FC<Props> = ({ title }) => {
       <Banner text="Attention: Claim must be called from other participant’s network" />
 
       <form onSubmit={handleSubmit}>
+        <h4 className={styles.title}>
+          Signature
+        </h4>
         <div className={cn(styles.inputWrapper, styles.mb)}>
           <Input
             name="signature"
@@ -106,6 +109,9 @@ export const Claim: FC<Props> = ({ title }) => {
           />
         </div>
 
+        <h4 className={styles.title}>
+          Trade hash
+        </h4>
         <div className={styles.inputWrapper}>
           <Input
             name="hash"

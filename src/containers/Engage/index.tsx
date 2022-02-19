@@ -30,9 +30,11 @@ export const Engage: FC<Props> = ({
   const { methodsSwap } = useLoadWeb3();
   const navigate = useNavigate();
 
-  const { search } = useLocation();
+  const { pathname } = useLocation();
 
-  const queryParams = parseQueryString(search);
+  const queryParams = parseQueryString(pathname);
+
+  console.log(pathname, queryParams);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -78,7 +80,7 @@ export const Engage: FC<Props> = ({
 
       toast.success('Claim successful');
 
-      navigate(`${nextScreenRoute}/&${queryString({ hashTrade: hash, signature })}`);
+      navigate(`${nextScreenRoute}/&${queryString({ tradeHash: hash, signature })}`);
       setIsLoading(false);
     } catch (e) {
       toast.error('Claim failed');
@@ -96,6 +98,9 @@ export const Engage: FC<Props> = ({
       <Banner text="Attention: Engage must be called from other participant’s network" />
 
       <form onSubmit={handleSubmit}>
+        <h4 className={styles.title}>
+          Trade hash
+        </h4>
         <div className={styles.inputWrapper}>
           <Input
             name="hash"

@@ -118,7 +118,7 @@ export const TradeHashFollower: FC = () => {
       toast.success('Lock successful');
       setIsLoading(false);
 
-      navigate(`${ROUTES.follower.engage}/&${queryString({ hashTrade: values.hash })}`);
+      navigate(`${ROUTES.follower.engage}/&${queryString({ tradeHash: values.hash })}`);
     } catch (e) {
       toast.error('Lock failed');
       setIsLoading(false);
