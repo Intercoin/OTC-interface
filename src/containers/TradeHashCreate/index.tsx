@@ -79,7 +79,7 @@ export const TradeHashCreate: FC = () => {
        * If there is not enough money to make a transaction, the statement is not called
        */
 
-      if (!Web3.utils.toBN(allowance).lt(Web3.utils.toWei(values.senderAmount, 'ether'))) {
+      if (Web3.utils.toBN(allowance).lt(Web3.utils.toWei(values.senderAmount, 'ether'))) {
         /**
          * is called to resolve the transaction
          */
