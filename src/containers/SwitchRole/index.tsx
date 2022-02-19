@@ -17,11 +17,11 @@ export const SwitchRole: FC = () => (
       className={styles.wrapper}
     >
     <div className={styles.container}>
-      <Link to={ROUTES.creator.generating}>
+      <Link to={ROUTES.creator.lock}>
         Creator
       </Link>
 
-      <Link to={ROUTES.follower.generating}>
+      <Link to={ROUTES.follower.lock}>
         Follower
       </Link>
     </div>

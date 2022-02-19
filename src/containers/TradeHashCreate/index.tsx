@@ -191,7 +191,7 @@ export const TradeHashCreate: FC = () => {
     <Container
       className={styles.container}
       text=''
-      title="Generating trade hash(Creator)"
+      title="Lock(Creator)"
     >
 
       <form onSubmit={handleSubmit}>
@@ -304,7 +304,7 @@ export const TradeHashCreate: FC = () => {
           onClick={() => handleGeneratingTradeHash()}
           disabled={disabledGeneratingTradeHash}
         >
-          Generating
+          Lock
         </Button>
 
         <div className={styles.inputWrapper}>

@@ -14,8 +14,8 @@ export const Follower: FC = () => {
   const LIST = useMemo(() => (
     [
       {
-        name: 'Generating',
-        to: ROUTES.follower.generating,
+        name: 'Lock',
+        to: ROUTES.follower.lock,
         status: true,
       },
       {
@@ -50,7 +50,7 @@ export const Follower: FC = () => {
         </Route>
 
         <Route
-          path="generating/*"
+          path="lock/*"
           element={<TradeHashFollower />}
         >
           <Route

@@ -14,8 +14,8 @@ export const Creator: FC = () => {
   const LIST = useMemo(() => (
     [
       {
-        name: 'Generating',
-        to: ROUTES.creator.generating,
+        name: 'Lock',
+        to: ROUTES.creator.lock,
         status: true,
       },
       {
@@ -36,7 +36,7 @@ export const Creator: FC = () => {
       <NavTab tabs={LIST} />
       <Routes>
         <Route
-          path="generating"
+          path="lock"
           element={<TradeHashCreate />}
         />
 

@@ -141,7 +141,7 @@ export const TradeHashFollower: FC = () => {
     <Container
       className={styles.container}
       text=''
-      title="Generating trade hash(Follower)"
+      title="Lock trade hash(Follower)"
     >
 
       <form onSubmit={handleSubmit}>

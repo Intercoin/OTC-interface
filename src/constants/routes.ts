@@ -4,13 +4,13 @@ type Routes = {
   switchRole: string,
   creator: {
     root: string,
-    generating: string,
+    lock: string,
     engage: string,
     claim: string,
   },
   follower: {
     root: string,
-    generating: string,
+    lock: string,
     engage: string,
     claim: string,
   },
@@ -21,13 +21,13 @@ export const ROUTES: Routes = {
   switchRole: `${ROOT_PREFIX}/role`,
   creator: {
     root: `${ROOT_PREFIX}/creator`,
-    generating: `${ROOT_PREFIX}/creator/generating`,
+    lock: `${ROOT_PREFIX}/creator/lock`,
     engage: `${ROOT_PREFIX}/creator/engage`,
     claim: `${ROOT_PREFIX}/creator/claim`,
   },
   follower: {
     root: `${ROOT_PREFIX}/follower`,
-    generating: `${ROOT_PREFIX}/follower/generating`,
+    lock: `${ROOT_PREFIX}/follower/lock`,
     engage: `${ROOT_PREFIX}/follower/engage`,
     claim: `${ROOT_PREFIX}/follower/claim`,
   },
