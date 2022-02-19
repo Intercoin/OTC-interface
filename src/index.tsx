@@ -9,6 +9,7 @@ import Web3 from 'web3';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import 'react-toastify/dist/ReactToastify.css';
 import './assets/styles/index.scss';
 
 function getLibrary(provider) {
@@ -20,7 +21,17 @@ ReactDOM.render(
     <Web3ReactProvider getLibrary={getLibrary}>
       <BrowserRouter>
         <App />
-        <ToastContainer />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </BrowserRouter>
     </Web3ReactProvider>
   </React.StrictMode>,

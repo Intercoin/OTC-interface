@@ -17,7 +17,7 @@ import {
   Container,
   InputAmount,
 } from 'components';
-import { useLoadWeb3, useTradeHash, useDelay } from 'hooks';
+import { useLoadWeb3, useTradeHash } from 'hooks';
 import { copyText, defineNetwork, queryString } from 'utils';
 import cn from 'classnames';
 import { ReactComponent as Check } from 'assets/images/lending/check.svg';
@@ -48,7 +48,6 @@ const SWAP_CONTRACTS_LIST = {
 export const TradeHashCreate: FC = () => {
   const web3 = useWeb3React();
   const navigate = useNavigate();
-  const { delay } = useDelay(1600);
 
   const [copyImgStyles, setCopyImgStyles] = useState<boolean>(false);
 
@@ -103,9 +102,8 @@ export const TradeHashCreate: FC = () => {
       toast.success('Lock successful');
 
       setIsLoading(false);
-      delay(() => {
-        navigate(`${ROUTES.creator.engage}/&${queryString({ hashTrade: values.hash })}`);
-      });
+
+      navigate(`${ROUTES.creator.engage}/&${queryString({ hashTrade: values.hash })}`);
     } catch (e) {
       setIsLoading(false);
       toast.error('Lock failed');

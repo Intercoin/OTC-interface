@@ -5,10 +5,11 @@ import {
   Input,
   Button,
   Container,
+  Banner,
 } from 'components';
 import { useWeb3React } from '@web3-react/core';
 import { useFormik } from 'formik';
-import { useDelay, useLoadWeb3 } from 'hooks';
+import { useLoadWeb3 } from 'hooks';
 import { parseQueryString, queryString } from 'utils';
 import { toast } from 'react-toastify';
 import { initialValues, validationSchema, Values } from './formik-data';
@@ -25,7 +26,6 @@ export const Engage: FC<Props> = ({
   title,
 }) => {
   const web3 = useWeb3React();
-  const { delay } = useDelay(1600);
   const { provider } = useLoadWeb3();
   const { methodsSwap } = useLoadWeb3();
   const navigate = useNavigate();
@@ -78,9 +78,7 @@ export const Engage: FC<Props> = ({
 
       toast.success('Claim successful');
 
-      delay(() => {
-        navigate(`${nextScreenRoute}/&${queryString({ hashTrade: hash, signature })}`);
-      });
+      navigate(`${nextScreenRoute}/&${queryString({ hashTrade: hash, signature })}`);
       setIsLoading(false);
     } catch (e) {
       toast.error('Claim failed');
@@ -95,6 +93,7 @@ export const Engage: FC<Props> = ({
       text=''
       title={title || ''}
     >
+      <Banner text="Attention: Engage must be called from other participant’s network" />
 
       <form onSubmit={handleSubmit}>
         <div className={styles.inputWrapper}>

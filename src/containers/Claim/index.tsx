@@ -5,6 +5,7 @@ import {
   Input,
   Button,
   Container,
+  Banner,
 } from 'components';
 import { useWeb3React } from '@web3-react/core';
 import { useFormik } from 'formik';
@@ -91,6 +92,7 @@ export const Claim: FC<Props> = ({ title }) => {
       text=''
       title={title || ''}
     >
+      <Banner text="Attention: Claim must be called from other participant’s network" />
 
       <form onSubmit={handleSubmit}>
         <div className={cn(styles.inputWrapper, styles.mb)}>

@@ -7,4 +7,5 @@ export { Dropdown } from './Dropdown';
 export { Loader } from './Loader';
 export { Progress } from './Progress';
 export { NavTab } from './NavTab';
+export { Banner } from './Banner';
 export * from './Input';
