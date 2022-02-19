@@ -16,10 +16,12 @@ import styles from './styles.module.scss';
 
 type Props = {
   nextScreenRoute?: string,
+  title?: string,
 };
 
 export const Engage: FC<Props> = ({
   nextScreenRoute,
+  title,
 }) => {
   const web3 = useWeb3React();
   const { provider } = useLoadWeb3();
@@ -84,7 +86,7 @@ export const Engage: FC<Props> = ({
     <Container
       className={styles.container}
       text=''
-      title="Engage"
+      title={title || ''}
     >
 
       <form onSubmit={handleSubmit}>

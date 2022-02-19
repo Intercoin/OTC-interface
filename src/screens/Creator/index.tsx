@@ -42,7 +42,7 @@ export const Creator: FC = () => {
 
         <Route
           path="engage"
-          element={(<Engage nextScreenRoute={ROUTES.creator.claim} />)}
+          element={(<Engage nextScreenRoute={ROUTES.creator.claim} title="Engage(Creator)" />)}
         >
           <Route
             path=":tradeHash"
@@ -51,7 +51,7 @@ export const Creator: FC = () => {
 
         <Route
           path="claim"
-          element={<Claim />}
+          element={<Claim title="Claim(Creator)" />}
         >
           <Route
             path=":tradeHash"

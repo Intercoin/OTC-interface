@@ -15,7 +15,11 @@ import { initialValues, validationSchema, Values } from './formik-data';
 
 import styles from './styles.module.scss';
 
-export const Claim: FC = () => {
+type Props = {
+  title?: string,
+};
+
+export const Claim: FC<Props> = ({ title }) => {
   const web3 = useWeb3React();
   const { provider } = useLoadWeb3();
   const { methodsSwap } = useLoadWeb3();
@@ -77,7 +81,7 @@ export const Claim: FC = () => {
     <Container
       className={styles.container}
       text=''
-      title="Claim"
+      title={title || ''}
     >
 
       <form onSubmit={handleSubmit}>

@@ -82,6 +82,48 @@
   {
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "_tradeHash",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_signature",
+        "type": "bytes"
+      }
+    ],
+    "name": "engage",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_tradeHash",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_index",
+        "type": "uint256"
+      }
+    ],
+    "name": "getSignature",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "signer",
         "type": "address"
@@ -158,24 +200,6 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_tradeHash",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes",
-        "name": "_signature",
-        "type": "bytes"
-      }
-    ],
-    "name": "publish",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
       }
@@ -203,7 +227,7 @@
         "type": "address"
       },
       {
-        "internalType": "enum TradeRegistratorERC20.Status",
+        "internalType": "enum TradeRegistratorERC20Test.Status",
         "name": "status",
         "type": "uint8"
       },

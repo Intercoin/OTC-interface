@@ -42,7 +42,7 @@ export const Follower: FC = () => {
       <Routes>
         <Route
           path="engage/*"
-          element={(<Engage nextScreenRoute={ROUTES.follower.claim} />)}
+          element={(<Engage nextScreenRoute={ROUTES.follower.claim} title="Engage(Follower)" />)}
         >
           <Route
             path=":tradeHash"
@@ -60,7 +60,7 @@ export const Follower: FC = () => {
 
         <Route
           path="claim/*"
-          element={<Claim />}
+          element={<Claim title="Claim(Follower)" />}
         >
           <Route
             path=":tradeHash"
