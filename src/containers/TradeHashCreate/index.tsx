@@ -94,7 +94,7 @@ export const TradeHashCreate: FC = () => {
 
       setIsLoading(false);
 
-      navigate(`${ROUTES.creator.publish}/${queryString({ hashTrade: values.hash })}`);
+      navigate(`${ROUTES.creator.publish}/&${queryString({ hashTrade: values.hash })}`);
     } catch (e) {
       setIsLoading(false);
       console.log(e);
@@ -148,7 +148,6 @@ export const TradeHashCreate: FC = () => {
       recipientPenalty,
     });
 
-    // await setTradeHash(tradeHash);
     await setFieldValue('hash', tradeHash);
   };
 
@@ -178,9 +177,6 @@ export const TradeHashCreate: FC = () => {
       className={styles.container}
       text=''
       title="Generating trade hash(Creator)"
-      backRoute={ROUTES.switchRole}
-      toRouteName="Publish"
-      toRoute={ROUTES.creator.publish}
     >
 
       <form onSubmit={handleSubmit}>

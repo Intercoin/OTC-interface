@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import {
   Input,
@@ -9,32 +9,21 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import { useFormik } from 'formik';
 import { useLoadWeb3 } from 'hooks';
-import { parseQueryString, queryString } from 'utils';
+import { parseQueryString } from 'utils';
+import cn from 'classnames';
 import { initialValues, validationSchema, Values } from './formik-data';
 
 import styles from './styles.module.scss';
 
-type Props = {
-  backRoute?: string,
-  toRoute?: string,
-  toRouteName?: string,
-  nextScreenRoute?: string,
-};
-
-export const Publish: FC<Props> = ({
-  backRoute,
-  toRoute,
-  toRouteName,
-  nextScreenRoute,
-}) => {
+export const Claim: FC = () => {
   const web3 = useWeb3React();
   const { provider } = useLoadWeb3();
   const { methodsSwap } = useLoadWeb3();
-  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  const { search } = useLocation();
+  const queryParams = parseQueryString(pathname);
 
-  const queryParams = parseQueryString(search);
+  console.log(queryParams);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -51,6 +40,7 @@ export const Publish: FC<Props> = ({
   const {
     values: {
       hash,
+      signature,
     },
     handleSubmit,
     handleBlur,
@@ -63,22 +53,21 @@ export const Publish: FC<Props> = ({
 
   async function onSubmit() {
     setIsLoading(true);
-    let signature = queryParams?.signature;
+    let mySignature = queryParams?.signature;
 
     try {
-      if (!signature) {
-        signature = await provider.eth.sign(
+      if (!mySignature) {
+        mySignature = await provider.eth.sign(
           `0x${hash}`,
           web3.account,
         );
       }
 
-      await methodsSwap?.publish(
+      await methodsSwap?.claim(
         `0x${hash}`,
-        signature,
+        [signature, mySignature],
       ).send({ from: web3.account });
 
-      navigate(`${nextScreenRoute}/${queryString({ hashTrade: hash, signature })}`);
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
@@ -90,13 +79,21 @@ export const Publish: FC<Props> = ({
     <Container
       className={styles.container}
       text=''
-      title="Publish"
-      backRoute={backRoute}
-      toRoute={toRoute}
-      toRouteName={toRouteName}
+      title="Claim"
     >
 
       <form onSubmit={handleSubmit}>
+        <div className={cn(styles.inputWrapper, styles.mb)}>
+          <Input
+            name="signature"
+            onChange={handleChange}
+            value={signature}
+            placeholder="Signature"
+            error={touched?.signature && errors?.signature}
+            onBlur={handleBlur}
+          />
+        </div>
+
         <div className={styles.inputWrapper}>
           <Input
             name="hash"
@@ -113,7 +110,7 @@ export const Publish: FC<Props> = ({
             disabled={!dirty || !isValid}
             className={styles.button}
           >
-            Publish
+            Claim
           </Button>
         </div>
       </form>

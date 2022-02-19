@@ -14,14 +14,11 @@ export const SwitchRole: FC = () => (
   <Container
       text=''
       title="Switch role"
+      className={styles.wrapper}
     >
     <div className={styles.container}>
       <Link to={ROUTES.creator.generating}>
         Creator
-      </Link>
-
-      <Link to={ROUTES.withdraw}>
-        Withdraw
       </Link>
 
       <Link to={ROUTES.follower.generating}>

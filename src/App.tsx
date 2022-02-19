@@ -3,16 +3,14 @@ import { useWeb3React } from '@web3-react/core';
 
 import { Header } from 'components';
 import { Route, Routes, Navigate } from 'react-router';
-import {
-  Claim,
-  Publish,
-  TradeHashCreate,
-  TradeHashFollower,
-  Withdraw,
-  SwitchRole,
-} from 'screens';
 import { injected } from './wallet/Connect';
 import { ROUTES } from './constants';
+import {
+  Follower,
+  Creator,
+  WithdrawScreen,
+  Main,
+} from './screens';
 
 import styles from './styles.module.scss';
 
@@ -37,100 +35,27 @@ const App: FC = () => {
       />
 
       <Routes>
-        {/* <Creator /> */}
         <Route
-          path={ROUTES.creator.root}
-          element={<TradeHashCreate />}
-        >
-          <Route
-            path={ROUTES.creator.generating}
-            element={<TradeHashCreate />}
-          />
-        </Route>
+          path="creator/*"
+          element={<Creator />}
+        />
 
         <Route
-          path={ROUTES.creator.publish}
-          element={(
-            <Publish
-              nextScreenRoute={ROUTES.creator.claim}
-              backRoute={ROUTES.creator.generating}
-              toRoute={ROUTES.creator.claim}
-              toRouteName="Claim"
-            />
-          )
-        }
-        >
-          <Route
-            path=":tradeHash"
-          />
-        </Route>
+          path="follower/*"
+          element={<Follower />}
+        />
 
         <Route
-          path={ROUTES.creator.claim}
-          element={<Claim backRoute={ROUTES.creator.publish} />}
-        >
-          <Route
-            path=":tradeHash"
-          />
-        </Route>
+          path="withdraw/*"
+          element={<WithdrawScreen />}
+        />
 
-        {/* <Follower /> */}
-        <Route path={ROUTES.follower.root}>
-          <Route
-            path={ROUTES.follower.publish}
-            element={(
-              <Publish
-                nextScreenRoute={ROUTES.follower.claim}
-                backRoute={ROUTES.follower.generating}
-                toRoute={ROUTES.follower.claim}
-                toRouteName="Claim"
-              />
-            )
-            }
-          >
-            <Route
-              path=":tradeHash"
-            />
-          </Route>
+        <Route path={ROUTES.switchRole} element={<Main />} />
 
-          <Route
-            path={ROUTES.follower.generating}
-            element={<TradeHashFollower />}
-          >
-            <Route
-              path=":tradeHash"
-            />
-          </Route>
-
-          <Route
-            path={ROUTES.follower.claim}
-            element={<Claim backRoute={ROUTES.follower.publish} />}
-          >
-            <Route
-              path=":tradeHash"
-            />
-          </Route>
-
-        </Route>
-
-        {/* <Withdraw /> */}
-        <Route
-          path={ROUTES.withdraw}
-          element={<Withdraw backRoute={ROUTES.switchRole} />}
-        >
-          <Route
-            path=":tradeHash"
-          />
-        </Route>
-
-        {/* <SwitchRole /> */}
-        <Route path={ROUTES.switchRole} element={<SwitchRole />} />
-
-        {/* Redirect */}
         <Route
           path="*"
           element={<Navigate to={ROUTES.switchRole} />}
-        />
+         />
       </Routes>
 
     </div>

@@ -1,7 +1,4 @@
-export { TradeHashCreate } from './TradeHashCreate';
-export { TradeHashFollower } from './TradeHashFollower';
-export { Publish } from './Publish';
-export { Claim } from './Claim';
-export { Withdraw } from './Withdraw';
-
-export { SwitchRole } from './SwitchRole';
+export { Creator } from './Creator';
+export { Follower } from './Follower';
+export { WithdrawScreen } from './WithdrawScreen';
+export { Main } from './Main';

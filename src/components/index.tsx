@@ -6,4 +6,5 @@ export { Container } from './Container';
 export { Dropdown } from './Dropdown';
 export { Loader } from './Loader';
 export { Progress } from './Progress';
+export { NavTab } from './NavTab';
 export * from './Input';

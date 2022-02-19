@@ -111,7 +111,7 @@ export const TradeHashFollower: FC = () => {
 
       setIsLoading(false);
 
-      navigate(`${ROUTES.follower.publish}/${queryString({ hashTrade: values.hash })}`);
+      navigate(`${ROUTES.follower.publish}/&${queryString({ hashTrade: values.hash })}`);
     } catch (e) {
       setIsLoading(false);
       console.log(e);
@@ -134,9 +134,6 @@ export const TradeHashFollower: FC = () => {
       className={styles.container}
       text=''
       title="Generating trade hash(Follower)"
-      backRoute={ROUTES.switchRole}
-      toRouteName="Publish"
-      toRoute={ROUTES.follower.publish}
     >
 
       <form onSubmit={handleSubmit}>

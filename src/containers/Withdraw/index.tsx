@@ -14,11 +14,7 @@ import { initialValues, validationSchema, Values } from './formik-data';
 
 import styles from './styles.module.scss';
 
-type Props = {
-  backRoute: string,
-};
-
-export const Withdraw: FC<Props> = ({ backRoute }) => {
+export const Withdraw: FC = () => {
   const web3 = useWeb3React();
   const { methodsSwap } = useLoadWeb3();
   const { search } = useLocation();
@@ -70,7 +66,6 @@ export const Withdraw: FC<Props> = ({ backRoute }) => {
       className={styles.container}
       text=''
       title="Withdraw"
-      backRoute={backRoute}
     >
 
       <form onSubmit={handleSubmit}>

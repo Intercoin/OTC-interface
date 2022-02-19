@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
   Input,
@@ -9,20 +9,23 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import { useFormik } from 'formik';
 import { useLoadWeb3 } from 'hooks';
-import { parseQueryString } from 'utils';
-import cn from 'classnames';
+import { parseQueryString, queryString } from 'utils';
 import { initialValues, validationSchema, Values } from './formik-data';
 
 import styles from './styles.module.scss';
 
 type Props = {
-  backRoute: string,
+  nextScreenRoute?: string,
 };
 
-export const Claim: FC<Props> = ({ backRoute }) => {
+export const Publish: FC<Props> = ({
+  nextScreenRoute,
+}) => {
   const web3 = useWeb3React();
   const { provider } = useLoadWeb3();
   const { methodsSwap } = useLoadWeb3();
+  const navigate = useNavigate();
+
   const { search } = useLocation();
 
   const queryParams = parseQueryString(search);
@@ -33,7 +36,6 @@ export const Claim: FC<Props> = ({ backRoute }) => {
     initialValues: {
       ...initialValues,
       hash: queryParams?.tradeHash || '',
-      signature: queryParams?.signature || '',
     },
     validationSchema,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -43,7 +45,6 @@ export const Claim: FC<Props> = ({ backRoute }) => {
   const {
     values: {
       hash,
-      signature,
     },
     handleSubmit,
     handleBlur,
@@ -56,21 +57,22 @@ export const Claim: FC<Props> = ({ backRoute }) => {
 
   async function onSubmit() {
     setIsLoading(true);
-    let mySignature = queryParams?.signature;
+    let signature = queryParams?.signature;
 
     try {
-      if (!mySignature) {
-        mySignature = await provider.eth.sign(
+      if (!signature) {
+        signature = await provider.eth.sign(
           `0x${hash}`,
           web3.account,
         );
       }
 
-      await methodsSwap?.claim(
+      await methodsSwap?.publish(
         `0x${hash}`,
-        [signature, mySignature],
+        signature,
       ).send({ from: web3.account });
 
+      navigate(`${nextScreenRoute}/&${queryString({ hashTrade: hash, signature })}`);
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
@@ -82,22 +84,10 @@ export const Claim: FC<Props> = ({ backRoute }) => {
     <Container
       className={styles.container}
       text=''
-      title="Claim"
-      backRoute={backRoute}
+      title="Publish"
     >
 
       <form onSubmit={handleSubmit}>
-        <div className={cn(styles.inputWrapper, styles.mb)}>
-          <Input
-            name="signature"
-            onChange={handleChange}
-            value={signature}
-            placeholder="Signature"
-            error={touched?.signature && errors?.signature}
-            onBlur={handleBlur}
-          />
-        </div>
-
         <div className={styles.inputWrapper}>
           <Input
             name="hash"
@@ -114,7 +104,7 @@ export const Claim: FC<Props> = ({ backRoute }) => {
             disabled={!dirty || !isValid}
             className={styles.button}
           >
-            Claim
+            Publish
           </Button>
         </div>
       </form>

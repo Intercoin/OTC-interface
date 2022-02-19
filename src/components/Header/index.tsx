@@ -3,6 +3,10 @@ import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
 
 import { Button, WalletAddress } from 'components';
 
+import { Link, useLocation } from 'react-router-dom';
+import cn from 'classnames';
+import { ROUTES } from '../../constants';
+
 import styles from './styles.module.scss';
 
 type Props = {
@@ -15,33 +19,52 @@ export const Header = ({
   account,
   active,
   connect,
-}: Props) => (
-  <header className={styles.headerWrapper}>
+}: Props) => {
+  const { pathname } = useLocation();
 
-    <div className={styles.header}>
+  return (
+    <header className={styles.headerWrapper}>
 
-      <div className={styles.navigationWrapper}>
-        <div className={styles.logo}>
-          OTC
+      <div className={styles.header}>
+
+        <div className={styles.navigationWrapper}>
+          <div className={styles.logo}>
+            OTC
+          </div>
+
+          <div className={styles.navigation}>
+            <Link
+              to={ROUTES.switchRole}
+              className={cn(styles.link, { [styles.linkActive]: pathname.includes('role') })}
+            >
+              Switch role
+            </Link>
+            <Link
+              to={ROUTES.withdraw}
+              className={cn(styles.link, { [styles.linkActive]: pathname.includes('withdraw') })}
+            >
+              Withdraw
+            </Link>
+          </div>
         </div>
-      </div>
 
-      <div className={styles.walletWrapper}>
-        {active ?
-          <WalletAddress
+        <div className={styles.walletWrapper}>
+          {active ?
+            <WalletAddress
               wallet={account}
               className={styles.walletAddress}
             /> :
-          <Button
+            <Button
               onClick={connect}
               className={styles.walletAddress}
             >
-            Connect Wallet
-          </Button>
+              Connect Wallet
+            </Button>
           }
+        </div>
+
       </div>
 
-    </div>
-
-  </header>
-);
+    </header>
+  );
+};
