@@ -11,6 +11,7 @@ import { useFormik } from 'formik';
 import { useLoadWeb3 } from 'hooks';
 import { parseQueryString } from 'utils';
 import cn from 'classnames';
+import { toast } from 'react-toastify';
 import { initialValues, validationSchema, Values } from './formik-data';
 
 import styles from './styles.module.scss';
@@ -58,6 +59,10 @@ export const Claim: FC<Props> = ({ title }) => {
     let mySignature = queryParams?.signature;
 
     try {
+      const info = await methodsSwap?.transfers(
+        `0x${hash}`,
+      ).call();
+
       if (!mySignature) {
         mySignature = await provider.eth.sign(
           `0x${hash}`,
@@ -68,10 +73,13 @@ export const Claim: FC<Props> = ({ title }) => {
       await methodsSwap?.claim(
         `0x${hash}`,
         [signature, mySignature],
-      ).send({ from: web3.account });
+      ).send({ from: web3.account, value: info?.withdrawPenalty });
+
+      toast.success('Claim successful');
 
       setIsLoading(false);
     } catch (e) {
+      toast.error('Claim failed');
       setIsLoading(false);
       console.log(e);
     }

@@ -15,6 +15,7 @@ import { useLoadWeb3 } from 'hooks';
 import { copyText, queryString } from 'utils';
 import cn from 'classnames';
 import { ReactComponent as Check } from 'assets/images/lending/check.svg';
+import { toast } from 'react-toastify';
 import { validationSchema, initialValues, Values } from './formik-data';
 import {
   SWAP_BSC_TESTNET_ADDRESS,
@@ -114,10 +115,12 @@ export const TradeHashFollower: FC = () => {
         Web3.utils.toWei(values.senderPenalty, 'ether'),
       )?.send({ from: web3.account });
 
+      toast.success('Lock successful');
       setIsLoading(false);
 
       navigate(`${ROUTES.follower.engage}/&${queryString({ hashTrade: values.hash })}`);
     } catch (e) {
+      toast.error('Lock failed');
       setIsLoading(false);
       console.log(e);
     }

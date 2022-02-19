@@ -8,8 +8,9 @@ import {
 } from 'components';
 import { useWeb3React } from '@web3-react/core';
 import { useFormik } from 'formik';
-import { useLoadWeb3 } from 'hooks';
+import { useDelay, useLoadWeb3 } from 'hooks';
 import { parseQueryString, queryString } from 'utils';
+import { toast } from 'react-toastify';
 import { initialValues, validationSchema, Values } from './formik-data';
 
 import styles from './styles.module.scss';
@@ -24,6 +25,7 @@ export const Engage: FC<Props> = ({
   title,
 }) => {
   const web3 = useWeb3React();
+  const { delay } = useDelay(1600);
   const { provider } = useLoadWeb3();
   const { methodsSwap } = useLoadWeb3();
   const navigate = useNavigate();
@@ -74,9 +76,14 @@ export const Engage: FC<Props> = ({
         signature,
       ).send({ from: web3.account });
 
-      navigate(`${nextScreenRoute}/&${queryString({ hashTrade: hash, signature })}`);
+      toast.success('Claim successful');
+
+      delay(() => {
+        navigate(`${nextScreenRoute}/&${queryString({ hashTrade: hash, signature })}`);
+      });
       setIsLoading(false);
     } catch (e) {
+      toast.error('Claim failed');
       setIsLoading(false);
       console.log(e);
     }

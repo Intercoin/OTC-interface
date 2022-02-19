@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 import { Web3ReactProvider } from '@web3-react/core';
 import Web3 from 'web3';
@@ -19,6 +20,7 @@ ReactDOM.render(
     <Web3ReactProvider getLibrary={getLibrary}>
       <BrowserRouter>
         <App />
+        <ToastContainer />
       </BrowserRouter>
     </Web3ReactProvider>
   </React.StrictMode>,

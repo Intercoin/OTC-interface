@@ -8,6 +8,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import Web3 from 'web3';
+import { toast } from 'react-toastify';
 
 import {
   Input,
@@ -50,6 +51,7 @@ export const TradeHashCreate: FC = () => {
   const { delay } = useDelay(1600);
 
   const [copyImgStyles, setCopyImgStyles] = useState<boolean>(false);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const formik = useFormik<Values>({
@@ -98,12 +100,15 @@ export const TradeHashCreate: FC = () => {
         Web3.utils.toWei(values.senderPenalty, 'ether'),
       )?.send({ from: web3.account });
 
+      toast.success('Lock successful');
+
       setIsLoading(false);
       delay(() => {
         navigate(`${ROUTES.creator.engage}/&${queryString({ hashTrade: values.hash })}`);
       });
     } catch (e) {
       setIsLoading(false);
+      toast.error('Lock failed');
       console.log(e);
     }
 
