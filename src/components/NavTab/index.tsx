@@ -22,7 +22,7 @@ export const NavTab: FC<Props> = ({ tabs, className }) => {
     <div className={cn(styles.container, className)}>
       {
         tabs.map(({ name, to }) => (
-          <Link to={to} className={cn(styles.tab, { [styles.active]: pathname.includes(name.toLowerCase()) })}>
+          <Link key={name} to={to} className={cn(styles.tab, { [styles.active]: pathname.includes(name.toLowerCase()) })}>
             {/* <div className={cn(styles.status, { [styles.done]: status })} /> */}
             {name}
           </Link>

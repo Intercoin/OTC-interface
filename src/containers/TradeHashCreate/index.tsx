@@ -16,7 +16,7 @@ import {
   Container,
   InputAmount,
 } from 'components';
-import { useLoadWeb3, useTradeHash } from 'hooks';
+import { useLoadWeb3, useTradeHash, useDelay } from 'hooks';
 import { copyText, defineNetwork, queryString } from 'utils';
 import cn from 'classnames';
 import { ReactComponent as Check } from 'assets/images/lending/check.svg';
@@ -47,6 +47,7 @@ const SWAP_CONTRACTS_LIST = {
 export const TradeHashCreate: FC = () => {
   const web3 = useWeb3React();
   const navigate = useNavigate();
+  const { delay } = useDelay(1600);
 
   const [copyImgStyles, setCopyImgStyles] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -79,7 +80,7 @@ export const TradeHashCreate: FC = () => {
        * If there is not enough money to make a transaction, the statement is not called
        */
 
-      if (Web3.utils.toBN(allowance).lt(Web3.utils.toWei(values.senderAmount, 'ether'))) {
+      if (Web3.utils.toBN(allowance).lt((Web3.utils.toBN(Web3.utils.toWei(values.senderAmount, 'ether').toString())))) {
         /**
          * is called to resolve the transaction
          */
@@ -98,8 +99,9 @@ export const TradeHashCreate: FC = () => {
       )?.send({ from: web3.account });
 
       setIsLoading(false);
-
-      navigate(`${ROUTES.creator.engage}/&${queryString({ hashTrade: values.hash })}`);
+      delay(() => {
+        navigate(`${ROUTES.creator.engage}/&${queryString({ hashTrade: values.hash })}`);
+      });
     } catch (e) {
       setIsLoading(false);
       console.log(e);

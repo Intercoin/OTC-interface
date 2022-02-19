@@ -96,7 +96,7 @@ export const TradeHashFollower: FC = () => {
        * If there is not enough money to make a transaction, the statement is not called
        */
 
-      if (Web3.utils.toBN(allowance).lt(Web3.utils.toWei(values.senderAmount, 'ether'))) {
+      if (Web3.utils.toBN(allowance).lt((Web3.utils.toBN(Web3.utils.toWei(values.senderAmount, 'ether').toString())))) {
         /**
          * is called to resolve the transaction
          */
