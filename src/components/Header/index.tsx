@@ -37,7 +37,7 @@ export const Header = ({
               to={ROUTES.switchRole}
               className={cn(styles.link, { [styles.linkActive]: pathname.includes('role') })}
             >
-              Switch role
+              Select role
             </Link>
             <Link
               to={ROUTES.withdraw}

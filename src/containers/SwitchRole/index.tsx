@@ -13,7 +13,7 @@ import styles from './styles.module.scss';
 export const SwitchRole: FC = () => (
   <Container
       text=''
-      title="Switch role"
+      title="Select role"
       className={styles.wrapper}
     >
     <div className={styles.container}>

@@ -103,7 +103,10 @@ export const TradeHashCreate: FC = () => {
 
       setIsLoading(false);
 
-      navigate(`${ROUTES.creator.engage}/&${queryString({ tradeHash: values.hash })}`);
+      navigate({
+        pathname: ROUTES.creator.engage,
+        search: queryString({ tradeHash: values.hash }),
+      });
     } catch (e) {
       setIsLoading(false);
       toast.error('Lock failed');
@@ -304,7 +307,7 @@ export const TradeHashCreate: FC = () => {
           onClick={() => handleGeneratingTradeHash()}
           disabled={disabledGeneratingTradeHash}
         >
-          Lock
+          Generate
         </Button>
 
         <div className={styles.inputWrapper}>

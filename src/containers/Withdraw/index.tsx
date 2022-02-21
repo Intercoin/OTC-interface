@@ -10,6 +10,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useFormik } from 'formik';
 import { useLoadWeb3 } from 'hooks';
 import { parseQueryString } from 'utils';
+import { toast } from 'react-toastify';
 import { initialValues, validationSchema, Values } from './formik-data';
 
 import styles from './styles.module.scss';
@@ -53,9 +54,11 @@ export const Withdraw: FC = () => {
       await methodsSwap?.withdraw(
         `0x${hash}`,
       ).send({ from: web3.account });
+      toast.success('Claim successful');
 
       setIsLoading(false);
     } catch (e) {
+      toast.error('Withdraw failed');
       setIsLoading(false);
       console.log(e);
     }
@@ -69,6 +72,9 @@ export const Withdraw: FC = () => {
     >
 
       <form onSubmit={handleSubmit}>
+        <h4 className={styles.title}>
+          Trade hash
+        </h4>
         <div className={styles.inputWrapper}>
           <Input
             name="hash"

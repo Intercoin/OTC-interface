@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
@@ -30,11 +30,9 @@ export const Engage: FC<Props> = ({
   const { methodsSwap } = useLoadWeb3();
   const navigate = useNavigate();
 
-  const { pathname } = useLocation();
+  const { search, pathname } = useLocation();
 
-  const queryParams = parseQueryString(pathname);
-
-  console.log(pathname, queryParams);
+  const queryParams = parseQueryString(search);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -58,7 +56,6 @@ export const Engage: FC<Props> = ({
     isValid,
     touched,
     errors,
-    dirty,
   } = formik;
 
   async function onSubmit() {
@@ -78,16 +75,26 @@ export const Engage: FC<Props> = ({
         signature,
       ).send({ from: web3.account });
 
-      toast.success('Claim successful');
+      toast.success('Engage successful');
 
-      navigate(`${nextScreenRoute}/&${queryString({ tradeHash: hash, signature })}`);
+      navigate({
+        pathname: nextScreenRoute,
+        search: queryString({ tradeHash: hash, signature }),
+      });
       setIsLoading(false);
     } catch (e) {
-      toast.error('Claim failed');
+      toast.error('Engage failed');
       setIsLoading(false);
       console.log(e);
     }
   }
+
+  const handleValuesChange = useCallback((values: string) => {
+    navigate({
+      pathname,
+      search: queryString({ tradeHash: values }),
+    });
+  }, [search]);
 
   return (
     <Container
@@ -104,7 +111,10 @@ export const Engage: FC<Props> = ({
         <div className={styles.inputWrapper}>
           <Input
             name="hash"
-            onChange={handleChange}
+            onChange={(e) => {
+              handleChange(e);
+              handleValuesChange(e.target.value);
+            }}
             value={hash}
             placeholder="Trade hash"
             error={touched?.hash && errors?.hash}
@@ -114,7 +124,7 @@ export const Engage: FC<Props> = ({
           <Button
             type="submit"
             isLoading={isLoading}
-            disabled={!dirty || !isValid}
+            disabled={!isValid}
             className={styles.button}
           >
             Engage

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { Navigate, Route, Routes } from 'react-router';
 
@@ -30,10 +30,6 @@ export const Follower: FC = () => {
       },
     ]
   ), []);
-
-  useEffect(() => {
-    console.log();
-  }, []);
 
   return (
     <>

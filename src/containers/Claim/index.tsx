@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { FC, useCallback, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
   Input,
@@ -10,7 +10,7 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import { useFormik } from 'formik';
 import { useLoadWeb3 } from 'hooks';
-import { parseQueryString } from 'utils';
+import { parseQueryString, queryString } from 'utils';
 import cn from 'classnames';
 import { toast } from 'react-toastify';
 import { initialValues, validationSchema, Values } from './formik-data';
@@ -25,9 +25,10 @@ export const Claim: FC<Props> = ({ title }) => {
   const web3 = useWeb3React();
   const { provider } = useLoadWeb3();
   const { methodsSwap } = useLoadWeb3();
-  const { pathname } = useLocation();
+  const { search, pathname } = useLocation();
+  const navigate = useNavigate();
 
-  const queryParams = parseQueryString(pathname);
+  const queryParams = parseQueryString(search);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -86,6 +87,16 @@ export const Claim: FC<Props> = ({ title }) => {
     }
   }
 
+  const handleValuesChange = useCallback((values: string) => {
+    navigate({
+      pathname,
+      search: queryString({
+        ...queryParams,
+        tradeHash: values,
+      }),
+    });
+  }, [search]);
+
   return (
     <Container
       className={styles.container}
@@ -115,7 +126,10 @@ export const Claim: FC<Props> = ({ title }) => {
         <div className={styles.inputWrapper}>
           <Input
             name="hash"
-            onChange={handleChange}
+            onChange={(e) => {
+              handleChange(e);
+              handleValuesChange(e.target.value);
+            }}
             value={hash}
             placeholder="Trade hash"
             error={touched?.hash && errors?.hash}
